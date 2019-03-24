@@ -7,9 +7,14 @@
 
 // Insert other functions here, or include header files
 
+int h;
+int w;
+
 int robot_weight;
 int robot_battery;
 int robot_direction;
+int robot_x_pos;
+int robot_y_pos;
 
 int available_dust;
 int available_slime;
@@ -17,14 +22,9 @@ int available_trash;
 
 
 void draw_border() {
-    int w;
-    int h;
-
     int vertical = '|';
     int horizontal =  '-';
     int corner = '+';
-
-    get_screen_size(&w, &h);
 
     draw_line(0, 0, 0, h - 1, vertical);
     draw_line(0, 0, w - 2, 0, horizontal);
@@ -33,7 +33,7 @@ void draw_border() {
     draw_line(w - 1, 1, w - 1, h - 1, vertical);
 
     draw_char(0, 0, corner);
-    draw_char(0, h -1 , corner);
+    draw_char(0, h - 1 , corner);
     draw_char(w - 1, 0, corner);
     draw_char(w - 1, h - 1, corner);
 }
@@ -74,16 +74,10 @@ void draw_available_rubbish(){
 }
 
 void draw_status_display(){
-    int w = 150;
-    int h = 50;
-
     int status_height = 6;
-
     int vertical = '|';
     int horizontal =  '-';
     int corner = '+';
-
-    get_screen_size(&w, &h);
 
     draw_line(1, status_height, w - 2, status_height, horizontal);
     draw_line(1, status_height / 2, w - 2,  status_height / 2, horizontal);
@@ -105,25 +99,29 @@ void draw_status_display(){
 }
 
 void draw_command_window(){
-    int w, h;
 
     int vertical = '-';
     int corner = '+';
-
-    get_screen_size(&w, &h);
 
     draw_line(1, h - 4, w - 2, h - 4, vertical);
     draw_char(0, h - 4, corner);
     draw_char(w - 1, h - 4, corner);
 }
 
+void draw_robot(int direction){
+
+}
 
 void init_robot(){
+
+
     robot_battery = 100;
     robot_weight = 0;
+    robot_x_pos = 75, robot_y_pos = 25;
 }
 
 void setup () {
+    get_screen_size(&w, &h);
     init_robot();
 
     draw_border();
