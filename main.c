@@ -18,7 +18,12 @@ int available_dust;
 int available_slime;
 int available_trash;
 
-
+/**
+ * draws the border around the terminal
+ * Parameters:
+ *      w: the width of the terminal
+ *      h: the height of the terminal
+ */
 void draw_border(int w, int h) {
     int vertical = '|';
     int horizontal =  '-';
@@ -36,6 +41,12 @@ void draw_border(int w, int h) {
     draw_char(w - 1, h - 1, corner);
 }
 
+/**
+ * draws the status display the top of the terminal
+ * Parameters:
+ *      w: the width of the terminal
+ *      h: the height of the terminal
+ */
 void draw_status_display(int w, int h){
     int status_height = 6;
     int vertical = '|';
@@ -61,6 +72,14 @@ void draw_status_display(int w, int h){
     draw_char(w / 3 * 2, status_height, corner);
 }
 
+/**
+ * Draws a status item using the content and position parameters supplied
+ * Parameters:
+ *      string[]: the content of the status item
+ *      row: the row that the status item is the be displayed in
+ *      column: the column that the status item is to be displayed in
+ *      w: the width of the screen
+ */
 void draw_status_item(char string[], int row, int column, int w){
     int y_pos;
     int offset = strlen(string) / 2;
@@ -72,6 +91,11 @@ void draw_status_item(char string[], int row, int column, int w){
     draw_string(x_pos, y_pos, string);
 }
 
+/**
+ * draws the status items with the current values of the items
+ * Parameters:
+ *      w: the width of the terminal
+ */
 void draw_status_items(int w){
     char student_number[] = "n10009671";
     draw_status_item(student_number, 1, 1, w);
@@ -97,6 +121,12 @@ void draw_status_items(int w){
     draw_status_item(rubbish, 2, 3, w);
 }
 
+/**
+ * draws the command window at the bottom of the terminal
+ * Parameters:
+ *      w: the width of the terminal
+ *      h: the height of the terminal
+ */
 void draw_command_window(int w, int h){
 
     int vertical = '-';
@@ -111,6 +141,9 @@ void draw_robot(int direction){
 
 }
 
+/**
+ * initializes the robot with the starting values
+ */
 void init_robot(){
     robot_battery = 100;
     robot_weight = 0;
@@ -139,6 +172,8 @@ int main() {
     setup_screen();
     setup();
     show_screen();
+
+
     while ( 1/* Insert termination conditions here */ ) {
         loop();
        // timer_pause( /* Insert delay expression here. */ );
