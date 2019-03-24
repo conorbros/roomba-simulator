@@ -159,7 +159,7 @@ void draw_string(int x, int y, char * text);
  *
  *    Notes:
  *    (1)    This function is logically equivalent to draw_formatted(x, y, "%d", value).
- *    (2) Use draw_formatted() to achieve advanced effects such as justification and padding.
+ *    (2) Use draw_form atted() to achieve advanced effects such as justification and padding.
  */
 void draw_int(int x, int y, int value);
 

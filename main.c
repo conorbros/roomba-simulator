@@ -7,21 +7,19 @@
 
 // Insert other functions here, or include header files
 
-int h;
-int w;
-
 int robot_weight;
 int robot_battery;
 int robot_direction;
 int robot_x_pos;
 int robot_y_pos;
+bool return_to_base;
 
 int available_dust;
 int available_slime;
 int available_trash;
 
 
-void draw_border() {
+void draw_border(int w, int h) {
     int vertical = '|';
     int horizontal =  '-';
     int corner = '+';
@@ -38,42 +36,7 @@ void draw_border() {
     draw_char(w - 1, h - 1, corner);
 }
 
-void draw_student_number(){
-    char student_number[] = "n10009671";
-    draw_string(20, 2, student_number);
-}
-
-void draw_robot_direction_status(){
-    char direction[15];
-    sprintf(direction, "Direction: %d", robot_direction);
-    draw_string(67, 2, direction);
-}
-
-void draw_robot_battery_life(){
-    char battery[13];
-    sprintf(battery, "Battery: %d%%", robot_battery);
-    draw_string(118, 2, battery);
-}
-
-void draw_time_since_reset(){
-    char time_running[20];
-    sprintf(time_running, "Time running: 00:00");
-    draw_string(15, 5, time_running);
-}
-
-void draw_robot_weight(){
-    char weight[11];
-    sprintf(weight, "Weight: %dg", robot_weight);
-    draw_string(67, 5, weight);
-}
-
-void draw_available_rubbish(){
-    char rubbish[13];
-    sprintf(rubbish, "%d, %d, %d", available_dust, available_slime, available_trash);
-    draw_string(121, 5, rubbish);
-}
-
-void draw_status_display(){
+void draw_status_display(int w, int h){
     int status_height = 6;
     int vertical = '|';
     int horizontal =  '-';
@@ -98,7 +61,43 @@ void draw_status_display(){
     draw_char(w / 3 * 2, status_height, corner);
 }
 
-void draw_command_window(){
+void draw_status_item(char string[], int row, int column, int w){
+    int y_pos;
+    int offset = strlen(string) / 2;
+    int x_pos = ((w / 3) * column) - ((w / 3) / 2) - offset;
+
+    if (row == 1) y_pos = 2;
+    if (row == 2) y_pos = 5;
+
+    draw_string(x_pos, y_pos, string);
+}
+
+void draw_status_items(int w){
+    char student_number[] = "n10009671";
+    draw_status_item(student_number, 1, 1, w);
+
+    char direction[15];
+    sprintf(direction, "Direction: %d", robot_direction);
+    draw_status_item(direction, 1, 2, w);
+
+    char battery[13];
+    sprintf(battery, "Battery: %d%%", robot_battery);
+    draw_status_item(battery, 1, 3, w);
+
+    char time_running[20];
+    sprintf(time_running, "Time running: 00:00");
+    draw_status_item(time_running, 2, 1, w);
+
+    char weight[11];
+    sprintf(weight, "Weight: %dg", robot_weight);
+    draw_status_item(weight, 2, 2, w);
+
+    char rubbish[13];
+    sprintf(rubbish, "%d, %d, %d", available_dust, available_slime, available_trash);
+    draw_status_item(rubbish, 2, 3, w);
+}
+
+void draw_command_window(int w, int h){
 
     int vertical = '-';
     int corner = '+';
@@ -113,27 +112,23 @@ void draw_robot(int direction){
 }
 
 void init_robot(){
-
-
     robot_battery = 100;
     robot_weight = 0;
     robot_x_pos = 75, robot_y_pos = 25;
+    return_to_base = false;
 }
 
 void setup () {
+    int h;
+    int w;
     get_screen_size(&w, &h);
+
     init_robot();
 
-    draw_border();
-    draw_status_display();
-    draw_command_window();
-
-    draw_student_number();
-    draw_robot_direction_status();
-    draw_robot_battery_life();
-    draw_robot_weight();
-    draw_time_since_reset();
-    draw_available_rubbish();
+    draw_border(w, h);
+    draw_status_display(w, h);
+    draw_command_window(w, h);
+    draw_status_items(w);
 }
 
 void loop() {
