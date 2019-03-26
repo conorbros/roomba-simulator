@@ -18,6 +18,10 @@ int available_dust;
 int available_slime;
 int available_trash;
 
+const double velocity = 0.2;
+
+#define M_PI 3.14159265358979323846
+
 /**
  * draws the border around the terminal
  * Parameters:
@@ -137,18 +141,57 @@ void draw_command_window(int w, int h){
     draw_char(w - 1, h - 4, corner);
 }
 
-void draw_robot(int direction){
+void draw_pixels(int left, int top, int width, int height, char bitmap[], 
+    bool space_is_transparent)
+{
+    for(int j = 0; j < height; j++){
+        for(int i = 0; i < width; i++){
+            if(bitmap[i+j*width] != ' '){
+                draw_char(left+i, top+j, bitmap[i+j*width]);
+            }else if(!space_is_transparent){
+                draw_char(left+i, top+j, ' ');
+            }
+        }
+    }
+}
 
+void draw_robot(){
+    char * robot = 
+    "  @@@@@  "
+    " @     @ "
+    "@       @"
+    "@       @"
+    "@       @"
+    "@       @"
+    "@       @"
+    " @     @ "
+    "  @@@@@  ";
+
+    draw_pixels(robot_x_pos - 4, robot_y_pos - 4, 9, 9, robot, false);
 }
 
 /**
  * initializes the robot with the starting values
  */
-void init_robot(){
+void init_robot(int w, int h){
     robot_battery = 100;
     robot_weight = 0;
-    robot_x_pos = 75, robot_y_pos = 25;
+    robot_x_pos = w / 2, robot_y_pos = h / 2;
     return_to_base = false;
+}
+
+void update_robot(double angle){
+
+    robot_x_pos += velocity * cos(angle * M_PI / 180);
+    robot_y_pos += velocity * sin(angle * M_PI / 180);
+    draw_robot();
+}
+
+void draw_gui(int w, int h){
+    draw_border(w, h);
+    draw_status_display(w, h);
+    draw_command_window(w, h);
+    draw_status_items(w);
 }
 
 void setup () {
@@ -156,16 +199,16 @@ void setup () {
     int w;
     get_screen_size(&w, &h);
 
-    init_robot();
-
-    draw_border(w, h);
-    draw_status_display(w, h);
-    draw_command_window(w, h);
-    draw_status_items(w);
+    init_robot(w, h);
+    draw_gui(w, h);
+    draw_robot();
 }
 
 void loop() {
+    clear_screen();
+    update_robot(90);
 
+    show_screen();
 }
 
 int main() {
@@ -177,7 +220,6 @@ int main() {
     while ( 1/* Insert termination conditions here */ ) {
         loop();
        // timer_pause( /* Insert delay expression here. */ );
-
     }
 
     return 0;
