@@ -1,3 +1,10 @@
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+#include <limits.h>
+#include <cab202_graphics.h>
+#include <cab202_timers.h>
+
 void process_input(char input){
 
     //echo char to command window

@@ -12,6 +12,7 @@ static double robot_x_pos;
 static double robot_y_pos;
 static double robot_direction_angle;
 
+static bool robot_moving;
 static bool return_to_base;
 
 static const double velocity = 0.2;
@@ -47,6 +48,14 @@ bool get_return_to_base(){
     return return_to_base;
 }
 
+bool get_robot_moving(){
+    return robot_moving;
+}
+
+void toggle_robot_moving(){
+    robot_moving = !robot_moving;
+}
+
 /**
  * draws the robot at its current position
  */
@@ -76,5 +85,6 @@ void init_robot(){
     robot_weight = 0;
     robot_x_pos = width / 2, robot_y_pos = height / 2;
     return_to_base = false;
+    robot_moving = false;
 }
 

@@ -16,9 +16,6 @@ const int corner = '+';
  * draws the border around the terminal
  */
 void draw_border() {
-    int vertical = '|';
-    int horizontal =  '-';
-    int corner = '+';
 
     draw_line(0, 0, 0, height - 1, vertical);
     draw_line(0, 0, width - 2, 0, horizontal);
@@ -33,13 +30,10 @@ void draw_border() {
 }
 
 /**
- * draws the status display the top of the terminal
+ * draws the status display borders at the top of the terminal
  */
 void draw_status_display(){
     int status_height = 6;
-    int vertical = '|';
-    int horizontal =  '-';
-    int corner = '+';
 
     draw_line(1, status_height, width - 2, status_height, horizontal);
     draw_line(1, status_height / 2, width - 2,  status_height / 2, horizontal);
@@ -64,9 +58,6 @@ void draw_status_display(){
  * draws the command window at the bottom of the terminal
  */
 void draw_command_window(){
-
-    int vertical = '-';
-    int corner = '+';
 
     draw_line(1, height - 4, width - 2, height - 4, vertical);
     draw_char(0, height - 4, corner);
@@ -99,11 +90,11 @@ void draw_status_items(){
     draw_status_item(student_number, 1, 1);
 
     char direction[15];
-    sprintf(direction, "Direction: %d", robot_direction);
+    sprintf(direction, "Direction: %d", 0);
     draw_status_item(direction, 1, 2);
 
     char battery[13];
-    sprintf(battery, "Battery: %d%%", robot_battery);
+    sprintf(battery, "Battery: %d%%", 100);
     draw_status_item(battery, 1, 3);
 
     char time_running[20];
@@ -121,11 +112,11 @@ void draw_status_items(){
     draw_status_item(time_running, 2, 1);
 
     char weight[11];
-    sprintf(weight, "Weight: %dg", robot_weight);
+    sprintf(weight, "Weight: %dg", 0);
     draw_status_item(weight, 2, 2);
 
     char rubbish[13];
-    sprintf(rubbish, "%d, %d, %d", available_dust, available_slime, available_trash);
+    sprintf(rubbish, "%d, %d, %d", 0, 0, 0);
     draw_status_item(rubbish, 2, 3);
 }
 
@@ -143,4 +134,5 @@ void draw_gui(){
     draw_border();
     draw_command_window();
     draw_status_display();
+    draw_status_items();
 }

@@ -1,7 +1,13 @@
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+#include <limits.h>
+#include <cab202_graphics.h>
+#include <cab202_timers.h>
 
-int dust_count;
-int slime_count;
-int trash_count;
+static int dust_count;
+static int slime_count;
+static int trash_count;
 
 void draw_charging_station(int width){
     char * charging_station =
