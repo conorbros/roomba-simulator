@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include <../ZDK/cab202_graphics.h>
-#include <../ZDK/cab202_timers.h>
+#include <cab202_graphics.h>
+#include <cab202_timers.h>
 
 // Insert other functions here, or include header files
-#include <gui.h>
+#include "gui.h"
 
 void loop() {
     clear_screen();
@@ -24,8 +24,7 @@ int main() {
 
     while (1) {
         loop();
-        timer_pause(time_slice);
-
+        timer_pause(100);
     }
 
     return 0;

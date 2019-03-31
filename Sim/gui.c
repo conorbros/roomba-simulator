@@ -2,9 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include <../ZDK/cab202_graphics.h>
-#include <../ZDK/cab202_timers.h>
-#include <gui.h>
+#include <cab202_graphics.h>
+#include <cab202_timers.h>
 
 static int width;
 static int height;
@@ -16,6 +15,21 @@ const int corner = '+';
 static double time_running;
 static double time_start;
 
+void update_timer(){
+    time_running = get_current_time() - time_start;
+}
+
+double get_time_running(){
+    return time_running;
+}
+
+void start_timer(){
+    time_start = get_current_time();
+}
+
+double get_time_start(){
+    return time_start;
+}
 
 /**
  * draws the border around the terminal
@@ -63,7 +77,6 @@ void draw_status_display(){
  * draws the command window at the bottom of the terminal
  */
 void draw_command_window(){
-
     draw_line(1, height - 4, width - 2, height - 4, vertical);
     draw_char(0, height - 4, corner);
     draw_char(width - 1, height - 4, corner);
@@ -102,22 +115,22 @@ void draw_status_items(){
     sprintf(battery, "Battery: %d%%", 0);
     draw_status_item(battery, 1, 3);
 
-    char time_running[20];
+    char time_output[20];
     double diff = get_time_running();
-    int minutes = floor(diff / 60);
+    int minutes = (int) diff / 60;
     int seconds = (int) diff % 60;
 
     if (minutes < 10 && seconds < 10){
-        sprintf(time_running, "Time running: 0%d:0%d", minutes, seconds);
+        sprintf(time_output, "Time running: 0%d:0%d", minutes, seconds);
     } else if (minutes < 10){
-        sprintf(time_running, "Time running: 0%d:%d", minutes, seconds);
+        sprintf(time_output, "Time running: 0%d:%d", minutes, seconds);
     } else if (seconds < 10){
-        sprintf(time_running, "Time running: %d:0%d", minutes, seconds);
+        sprintf(time_output, "Time running: %d:0%d", minutes, seconds);
     } else if (minutes == 0){
-        sprintf(time_running, "Time running: 00:%d", seconds);
+        sprintf(time_output, "Time running: 00:%d", seconds);
     }
 
-    draw_status_item(time_running, 2, 1);
+    draw_status_item(time_output, 2, 1);
 
     char weight[11];
     sprintf(weight, "Weight: %dg", 0);
@@ -126,26 +139,6 @@ void draw_status_items(){
     char rubbish[13];
     sprintf(rubbish, "%d, %d, %d", 0, 0, 0);
     draw_status_item(rubbish, 2, 3);
-}
-
-double get_time_running(){
-    return time_running;
-}
-
-void start_timer(){
-    time_start = get_current_time();
-}
-
-void update_timer(){
-    time_running =  get_current_time() - time_start;
-}
-
-double get_running_time(){
-    return time_running;
-}
-
-double get_time_start(){
-    return time_start;
 }
 
 void draw_gui(){

@@ -73,6 +73,11 @@ void process_input(char input){
         case 'y':
 
             break;
+            
+        //display help screen.
+        case '?':
+
+            break;
 
         default:
             break;

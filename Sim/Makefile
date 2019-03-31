@@ -1,25 +1,4 @@
-IDIR =../include
-CC=gcc
-CFLAGS=-I$(IDIR)
-
-ODIR=obj
-LDIR =../lib
-
-LIBS=-lm
-
-_DEPS = gui.h
-DEPS = $(patsubst %, $(ODIR)/%,$(_OBJ))
-
-_OBJ = main.o gui.o
-
-
-%.o: %.c $(DEPS)
-		$(CC) -c -o $@ $< $(CFLAGS)
-
-a1_n10009671: main.o gui.o
-		$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
-
-.PHONY: clean
-
-clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+a1_n10009671:
+	gcc -c main.c -std=gnu99 -Wall -Werror -g -I../ZDK
+	gcc -c gui.c -std=gnu99 -Wall -Werror -g -I../ZDK
+	gcc main.o gui.o -std=gnu99 -Wall -Werror -g -I../ZDK -L../ZDK -lzdk -lncurses -lm -o a1_n10009671

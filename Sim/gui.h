@@ -2,26 +2,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include <../ZDK/cab202_graphics.h>
-#include <../ZDK/cab202_timers.h>
-#include <gui.h>
+#include <cab202_graphics.h>
+#include <cab202_timers.h>
 
-void draw_border()
+void update_timer();
 
-void draw_status_display()
+double get_time_running();
 
-void draw_command_window()
+void start_timer();
 
-void draw_status_item(char string[], int row, int column)
+double get_time_start();
 
-void draw_status_items()
+void draw_border();
 
-double get_time_running()
+void draw_status_display();
 
-void start_timer()
+void draw_command_window();
 
-void update_timer()
+void draw_status_item(char string[], int row, int column);
 
-double get_running_time()
+void draw_status_items();
 
-void draw_gui()
+void draw_gui();
