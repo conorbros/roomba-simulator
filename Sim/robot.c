@@ -37,7 +37,9 @@ void set_robot_battery(int battery){
 }
 
 void decrement_battery(){
-    robot_battery--;
+    if ((int)get_current_time() - get_time_start() > get_time_running()){
+        robot_battery--;
+    }
 }
 
 bool set_return_to_base(bool value){
@@ -81,6 +83,8 @@ void move_robot(double angle){
 }
 
 void init_robot(){
+    int width, height;
+    get_screen_size(&width, &height);
     robot_battery = 100;
     robot_weight = 0;
     robot_x_pos = width / 2, robot_y_pos = height / 2;

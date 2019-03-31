@@ -12,6 +12,10 @@ const int vertical = '|';
 const int horizontal = '-';
 const int corner = '+';
 
+static double time_running;
+static double time_start;
+
+
 /**
  * draws the border around the terminal
  */
@@ -94,21 +98,24 @@ void draw_status_items(){
     draw_status_item(direction, 1, 2);
 
     char battery[13];
-    sprintf(battery, "Battery: %d%%", 100);
+    sprintf(battery, "Battery: %d%%", get_robot_battery());
     draw_status_item(battery, 1, 3);
 
     char time_running[20];
-    /**int minutes;
-    int seconds;
-    if (time_running == 0){
-        minutes = 0;
-        seconds = 0;
-    }else{
-        minutes =  ((int)time_running / 1000) / 60;
-        seconds =  ((int)time_running / 1000) % 60;
-    }*/
+    double diff = get_time_running();
+    int minutes = floor(diff / 60);
+    int seconds = (int) diff % 60;
+    
+    if (minutes < 10 && seconds < 10){
+        sprintf(time_running, "Time running: 0%d:0%d", minutes, seconds);
+    } else if (minutes < 10){
+        sprintf(time_running, "Time running: 0%d:%d", minutes, seconds);
+    } else if (seconds < 10){
+        sprintf(time_running, "Time running: %d:0%d", minutes, seconds);
+    } else if (minutes == 0){
+        sprintf(time_running, "Time running: 00:%d", seconds);
+    }
 
-    sprintf(time_running, "Time running: %d", (int)time_running);
     draw_status_item(time_running, 2, 1);
 
     char weight[11];
@@ -120,13 +127,24 @@ void draw_status_items(){
     draw_status_item(rubbish, 2, 3);
 }
 
+double get_time_running(){
+    return time_running;
+}
 
 void start_timer(){
-    start_time = get_current_time();
+    time_start = get_current_time();
 }
 
 void update_timer(){
-    running_time =  get_current_time() - start_time;
+    time_running =  get_current_time() - time_start;
+}
+
+double get_running_time(){
+    return time_running;
+}
+
+double get_time_start(){
+    return time_start;
 }
 
 void draw_gui(){

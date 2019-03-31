@@ -6,6 +6,8 @@
 #include <cab202_timers.h>
 
 void process_input(char input){
+    int width, height;
+    get_screen_size(&width, &height);
 
     //echo char to command window
     draw_char(width / 2, height - 2, input);
@@ -77,6 +79,3 @@ void process_input(char input){
     }
 }
 
-void echo_char_command(){
-
-}

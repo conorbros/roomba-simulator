@@ -8,13 +8,6 @@
 
 // Insert other functions here, or include header files
 
-void reset(){
-    init_robot();
-    time_running = 0;
-    time_start = get_current_time();
-}
-
-
 void loop() {
     clear_screen();
     update_timer();
