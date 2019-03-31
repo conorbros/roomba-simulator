@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include <cab202_graphics.h>
-#include <cab202_timers.h>
+#include <../ZDK/cab202_graphics.h>
+#include <../ZDK/cab202_timers.h>
+#include <gui.h>
 
 static int width;
 static int height;
@@ -98,14 +99,14 @@ void draw_status_items(){
     draw_status_item(direction, 1, 2);
 
     char battery[13];
-    sprintf(battery, "Battery: %d%%", get_robot_battery());
+    sprintf(battery, "Battery: %d%%", 0);
     draw_status_item(battery, 1, 3);
 
     char time_running[20];
     double diff = get_time_running();
     int minutes = floor(diff / 60);
     int seconds = (int) diff % 60;
-    
+
     if (minutes < 10 && seconds < 10){
         sprintf(time_running, "Time running: 0%d:0%d", minutes, seconds);
     } else if (minutes < 10){

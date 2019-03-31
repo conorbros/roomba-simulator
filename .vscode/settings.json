@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "cab202_timers.h": "c"
+        "cab202_timers.h": "c",
+        "cab202_graphics.h": "c"
     }
 }

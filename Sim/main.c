@@ -3,10 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include <cab202_graphics.h>
-#include <cab202_timers.h>
+#include <../ZDK/cab202_graphics.h>
+#include <../ZDK/cab202_timers.h>
 
 // Insert other functions here, or include header files
+#include <gui.h>
 
 void loop() {
     clear_screen();
