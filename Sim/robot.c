@@ -23,6 +23,10 @@ int get_robot_battery(){
     return robot_battery;
 }
 
+double get_robot_direction(){
+    return robot_direction;
+}
+
 void toggle_robot_moving(){
     robot_moving = !robot_moving;
 }
@@ -48,26 +52,50 @@ void draw_robot(){
     draw_pixels(robot_x_pos - 4, robot_y_pos - 4, 9, 9, robot, true);
 }
 
+int RandRange(int Min, int Max){
+    int diff = Max-Min;
+    return (int) (((double)(diff+1)/RAND_MAX) * rand() + Min);
+}
 
-void wall_collision(){
-    if (0 > robot_x_pos){
-        robot_direction = 0;
-    }else if (0 > robot_y_pos - 7){
-        robot_direction = 90;
-    }else if (get_screen_width() < robot_x_pos + 7){
-        robot_direction = 180;
-    }else if (get_screen_height() < robot_y_pos + 9){
-        robot_direction = 270;
+double swivel_robot(){
+    int left = (rand() > RAND_MAX/2) ? 0 : 1;
+    double new_facing = robot_direction;
+
+    if(left){
+        new_facing -= 30 + RandRange(0, 30);
+    }else{
+        new_facing += 30 + RandRange(0, 30);
     }
+
+    if (new_facing > 364){
+        new_facing = (int)new_facing % 365;
+    }else if (new_facing < 0){
+        new_facing = (int)new_facing % -365;
+    }
+
+    return new_facing;
+}
+
+bool wall_collision(){
+    return (0 >= robot_x_pos -1 ) || (0 > robot_y_pos - 8) || (get_screen_width() < robot_x_pos + 10) || (get_screen_height() - 4 < robot_y_pos);
 }
 
 
 void move_robot(){
-    wall_collision();
+
+    if(wall_collision()){
+
+        robot_direction = swivel_robot();
+
+    }
+
     if(robot_moving){
+
         robot_x_pos += velocity * cos(robot_direction * M_PI / 180);
         robot_y_pos += velocity * sin(robot_direction * M_PI / 180);
+
     }
+
     draw_robot();
 }
 

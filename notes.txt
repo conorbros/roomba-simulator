@@ -1,0 +1,4 @@
+
+gcc -c main.c gui.c -std=gnu99 -Wall -Werror -g -I../ZDK -L../ZDK -I./
+
+gcc main.o gui.o -o a1_n10009671 -std=gnu99 -Wall -Werror -g -lzdk -lncurses -lm -I../ZDK -L../ZDK -I./

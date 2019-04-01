@@ -139,7 +139,7 @@ void draw_status_items(){
     draw_status_item(student_number, 1, 1);
 
     char direction[15];
-    sprintf(direction, "Direction: %d", 0);
+    sprintf(direction, "Direction: %d", (int)get_robot_direction());
     draw_status_item(direction, 1, 2);
 
     char battery[13];
