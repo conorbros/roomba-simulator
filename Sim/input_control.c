@@ -5,6 +5,9 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
+#include "gui.h"
+#include "robot.h"
+
 void process_input(char input){
     int width, height;
     get_screen_size(&width, &height);
@@ -36,7 +39,7 @@ void process_input(char input){
 
         //cause the device to start moving (if it is stationary) or stop moving (if it is mobile).
         case 'p':
-
+            toggle_robot_moving();
             break;
 
         //quit simulation.
@@ -73,7 +76,7 @@ void process_input(char input){
         case 'y':
 
             break;
-            
+
         //display help screen.
         case '?':
 

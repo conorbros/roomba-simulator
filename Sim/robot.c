@@ -5,62 +5,34 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-static int robot_weight;
+#include "gui.h"
+
 static int robot_battery;
 
 static double robot_x_pos;
 static double robot_y_pos;
-static double robot_direction_angle;
+static double robot_direction;
 
 static bool robot_moving;
-static bool return_to_base;
 
 static const double velocity = 0.2;
 
-#define M_PI 3.14159265358979323846;
-
-
-int get_robot_weight(){
-    return robot_weight;
-}
-
-void set_robot_weight(int weight){
-    robot_weight = weight;
-}
+#define M_PI 3.14159265358979323846
 
 int get_robot_battery(){
     return robot_battery;
-}
-
-void set_robot_battery(int battery){
-    robot_battery = battery;
-}
-
-void decrement_battery(){
-    if ((int)get_current_time() - get_time_start() > get_time_running()){
-        robot_battery--;
-    }
-}
-
-bool set_return_to_base(bool value){
-    return_to_base = value;
-}
-
-bool get_return_to_base(){
-    return return_to_base;
-}
-
-bool get_robot_moving(){
-    return robot_moving;
 }
 
 void toggle_robot_moving(){
     robot_moving = !robot_moving;
 }
 
-/**
- * draws the robot at its current position
- */
+void decrement_battery(){
+    if (floor(get_current_time()) - get_time_start() > get_time_at_last_loop()){
+        robot_battery--;
+    }
+}
+
 void draw_robot(){
     char * robot =
     "  @@@@@  "
@@ -73,12 +45,29 @@ void draw_robot(){
     " @     @ "
     "  @@@@@  ";
 
-    draw_pixels(robot_x_pos - 4, robot_y_pos - 4, 9, 9, robot, false);
+    draw_pixels(robot_x_pos - 4, robot_y_pos - 4, 9, 9, robot, true);
 }
 
-void move_robot(double angle){
-    robot_x_pos += velocity * cos(angle * M_PI / 180);
-    robot_y_pos += velocity * sin(angle * M_PI / 180);
+
+void wall_collision(){
+    if (0 > robot_x_pos){
+        robot_direction = 0;
+    }else if (0 > robot_y_pos - 7){
+        robot_direction = 90;
+    }else if (get_screen_width() < robot_x_pos + 7){
+        robot_direction = 180;
+    }else if (get_screen_height() < robot_y_pos + 9){
+        robot_direction = 270;
+    }
+}
+
+
+void move_robot(){
+    wall_collision();
+    if(robot_moving){
+        robot_x_pos += velocity * cos(robot_direction * M_PI / 180);
+        robot_y_pos += velocity * sin(robot_direction * M_PI / 180);
+    }
     draw_robot();
 }
 
@@ -86,9 +75,8 @@ void init_robot(){
     int width, height;
     get_screen_size(&width, &height);
     robot_battery = 100;
-    robot_weight = 0;
     robot_x_pos = width / 2, robot_y_pos = height / 2;
-    return_to_base = false;
     robot_moving = false;
+    robot_direction = 90;
 }
 

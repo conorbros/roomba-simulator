@@ -5,6 +5,10 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
+int get_screen_width();
+
+int get_screen_height();
+
 void update_timer();
 
 double get_time_running();
@@ -12,6 +16,12 @@ double get_time_running();
 void start_timer();
 
 double get_time_start();
+
+void set_time_at_last_loop();
+
+double get_time_at_last_loop();
+
+void draw_pixels(int left, int top, int width, int height, char bitmap[], bool space_is_transparent);
 
 void draw_border();
 

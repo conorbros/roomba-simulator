@@ -5,4 +5,7 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-void draw_pixels(int left, int top, int width, int height, char bitmap[], bool space_is_transparent)
+#include "gui.h"
+#include "robot.h"
+
+void process_input(char input);

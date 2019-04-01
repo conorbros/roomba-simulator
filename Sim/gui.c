@@ -5,6 +5,8 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
+#include "robot.h"
+
 static int width;
 static int height;
 
@@ -13,7 +15,16 @@ const int horizontal = '-';
 const int corner = '+';
 
 static double time_running;
+static double time_at_last_loop;
 static double time_start;
+
+int get_screen_width(){
+    return width;
+}
+
+int get_screen_height(){
+    return height;
+}
 
 void update_timer(){
     time_running = get_current_time() - time_start;
@@ -29,6 +40,26 @@ void start_timer(){
 
 double get_time_start(){
     return time_start;
+}
+
+void set_time_at_last_loop(){
+    time_at_last_loop = time_running;
+}
+
+double get_time_at_last_loop(){
+    return time_at_last_loop;
+}
+
+void draw_pixels(int left, int top, int width, int height, char bitmap[], bool space_is_transparent){
+    for(int j = 0; j < height; j++){
+        for(int i = 0; i < width; i++){
+            if(bitmap[i+j*width] != ' '){
+                draw_char(left+i, top+j, bitmap[i+j*width]);
+            }else if(!space_is_transparent){
+                draw_char(left+i, top+j, ' ');
+            }
+        }
+    }
 }
 
 /**
@@ -77,7 +108,7 @@ void draw_status_display(){
  * draws the command window at the bottom of the terminal
  */
 void draw_command_window(){
-    draw_line(1, height - 4, width - 2, height - 4, vertical);
+    draw_line(1, height - 4, width - 2, height - 4, horizontal);
     draw_char(0, height - 4, corner);
     draw_char(width - 1, height - 4, corner);
 }
@@ -112,7 +143,7 @@ void draw_status_items(){
     draw_status_item(direction, 1, 2);
 
     char battery[13];
-    sprintf(battery, "Battery: %d%%", 0);
+    sprintf(battery, "Battery: %d%%", get_robot_battery());
     draw_status_item(battery, 1, 3);
 
     char time_output[20];
@@ -129,7 +160,6 @@ void draw_status_items(){
     } else if (minutes == 0){
         sprintf(time_output, "Time running: 00:%d", seconds);
     }
-
     draw_status_item(time_output, 2, 1);
 
     char weight[11];
