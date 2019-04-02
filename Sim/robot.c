@@ -177,9 +177,12 @@ void push_robot_down(){
 }
 
 void init_robot(){
+    int width;
+    int height;
+    get_screen_size(&width, &height);
     robot_battery = 100;
-    robot_x_pos = get_screen_width() / 2;
-    robot_y_pos = get_screen_height() / 2;
+    robot_x_pos = width / 2;
+    robot_y_pos = height / 2;
     robot_moving = false;
     robot_direction = 90;
     seconds_of_charging = 0;
