@@ -8,4 +8,8 @@
 #include "gui.h"
 #include "robot.h"
 
+void write_help_instructions();
+
+void display_help_screen();
+
 void process_input(char input);

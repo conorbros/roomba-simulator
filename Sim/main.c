@@ -13,10 +13,11 @@
 #include "input_control.h"
 #include "room.h"
 
+
 void loop(){
     clear_screen();
     update_timer();
-    decrement_battery();
+    update_battery();
     draw_gui();
     draw_room();
     move_robot();
@@ -37,7 +38,7 @@ int main(){
         char input = get_char();
         process_input(input);
         loop();
-        timer_pause(40);
+        timer_pause(50);
     }
 
     return 0;

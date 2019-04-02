@@ -10,13 +10,28 @@
 static int width;
 static int height;
 
-void draw_charging_station(){
-    char * charging_station =
+static int charging_station_x_position;
+static int charging_station_y_position;
+
+static char * charging_station =
     "#########"
     "#########"
     "#########";
 
-    draw_pixels(width / 2 - 4, 7, 9, 3, charging_station, false);
+int get_charging_station_x_position(){
+    return charging_station_x_position;
+}
+
+int get_charging_station_y_position(){
+    return charging_station_y_position;
+}
+
+char* get_charging_station(){
+    return charging_station;
+}
+
+void draw_charging_station(){
+    draw_pixels(charging_station_x_position, charging_station_y_position, 9, 3, charging_station, false);
 }
 
 void draw_room(){
@@ -25,5 +40,7 @@ void draw_room(){
 
 void init_room(){
     get_screen_size(&width, &height);
+    charging_station_x_position = width/2 - 5;
+    charging_station_y_position = 7;
 }
 
