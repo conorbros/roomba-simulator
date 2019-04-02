@@ -11,6 +11,8 @@ double get_robot_direction();
 
 void toggle_robot_moving();
 
+void set_robot_return_to_base();
+
 void decrement_battery();
 
 void draw_robot();
@@ -21,6 +23,6 @@ double swivel_robot();
 
 void wall_collision();
 
-void move_robot(double angle);
+void move_robot();
 
 void init_robot();

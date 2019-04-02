@@ -8,6 +8,11 @@
 #include "gui.h"
 #include "robot.h"
 
+void display_help(){
+    clear_screen();
+    
+}
+
 void process_input(char input){
     int width, height;
     get_screen_size(&width, &height);
@@ -19,7 +24,7 @@ void process_input(char input){
     {
         //tell the device to stop cleaning and return to base i.e. step repeatedly towards the charging dock.
         case 'b':
-            /* code */
+            set_robot_return_to_base();
             break;
 
         //drop a piece of dust (small rubbish) on the floor.
@@ -79,7 +84,7 @@ void process_input(char input){
 
         //display help screen.
         case '?':
-
+            display_help_screen();
             break;
 
         default:

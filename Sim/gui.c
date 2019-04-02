@@ -6,6 +6,7 @@
 #include <cab202_timers.h>
 
 #include "robot.h"
+#include "drawing.h"
 
 static int width;
 static int height;
@@ -48,18 +49,6 @@ void set_time_at_last_loop(){
 
 double get_time_at_last_loop(){
     return time_at_last_loop;
-}
-
-void draw_pixels(int left, int top, int width, int height, char bitmap[], bool space_is_transparent){
-    for(int j = 0; j < height; j++){
-        for(int i = 0; i < width; i++){
-            if(bitmap[i+j*width] != ' '){
-                draw_char(left+i, top+j, bitmap[i+j*width]);
-            }else if(!space_is_transparent){
-                draw_char(left+i, top+j, ' ');
-            }
-        }
-    }
 }
 
 /**
@@ -128,7 +117,7 @@ void draw_status_item(char string[], int row, int column){
     if (row == 1) y_pos = 2;
     if (row == 2) y_pos = 5;
 
-    draw_string(x_pos, y_pos, string);
+    draw_formatted(x_pos, y_pos,"%s", string);
 }
 
 /**

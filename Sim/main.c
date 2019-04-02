@@ -11,13 +11,15 @@
 #include "robot.h"
 #include "gui.h"
 #include "input_control.h"
+#include "room.h"
 
 void loop(){
     clear_screen();
     update_timer();
     decrement_battery();
     draw_gui();
-    move_robot(90.00);
+    draw_room();
+    move_robot();
     show_screen();
     set_time_at_last_loop();
 }
@@ -28,7 +30,9 @@ int main(){
     show_screen();
     start_timer();
     init_robot();
+    init_room();
     draw_robot();
+    draw_room();
     while (1) {
         char input = get_char();
         process_input(input);
