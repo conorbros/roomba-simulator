@@ -100,7 +100,7 @@ double swivel_robot(){
 
 bool is_charging_station_collision(){
     return pixel_collision(
-        robot_x_pos - 1, robot_y_pos - 1, 9, 9, robot,
+        robot_x_pos - 1, robot_y_pos - 1, 11, 11, robot,
         get_charging_station_x_position(), get_charging_station_y_position(), 9, 3, get_charging_station()
     );
 }
