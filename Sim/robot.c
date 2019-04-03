@@ -17,6 +17,7 @@ static double robot_y_pos;
 static double robot_direction;
 
 static bool robot_moving;
+static bool manual_control;
 static bool return_to_base;
 static bool docked;
 
@@ -150,6 +151,7 @@ void move_robot(){
 
     }
     draw_robot();
+    manual_control = false;
 }
 
 void push_robot_up(){
@@ -186,4 +188,5 @@ void init_robot(){
     robot_moving = false;
     robot_direction = 90;
     seconds_of_charging = 0;
+    manual_control = false;
 }
