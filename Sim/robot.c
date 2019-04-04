@@ -99,6 +99,23 @@ double swivel_robot(){
     return returnVal;
 }
 
+bool left_side_charging_station(){
+    return (robot_x_pos + 11 >= (double)get_charging_station_x_position() 
+        && robot_y_pos <= (double)get_charging_station_y_position() + 4);
+    
+}
+
+bool right_side_charging_station(){
+    return (robot_x_pos - 1 <= (double)get_charging_station_x_position() + 10 
+        && robot_y_pos <= (double)get_charging_station_y_position() + 4);
+}
+
+bool bottom_side_charging_station(){
+    return ((robot_x_pos - 1 <= (double)get_charging_station_x_position() 
+                || robot_x_pos + 11 >= (double)get_charging_station_x_position()) &&
+        (robot_y_pos <= (double)get_charging_station_y_position() + 4)); 
+}
+
 bool is_charging_station_collision(){
     return pixel_collision(
         robot_x_pos - 1, robot_y_pos - 1, 11, 11, robot,
@@ -136,7 +153,7 @@ void move_robot(){
 
 
         if(return_to_base){
-            if(!is_charging_station_collision()){
+            if(!is_charging_station_collision() && !manual_control){
                 robot_x_pos += base_dx;
                 robot_y_pos += base_dy;
             }else{
@@ -144,7 +161,7 @@ void move_robot(){
                 docked = true;
             }
 
-        }else{
+        }else if(!manual_control){
             robot_x_pos += velocity * cos(robot_direction * M_PI / 180);
             robot_y_pos += velocity * sin(robot_direction * M_PI / 180);
         }
@@ -157,24 +174,28 @@ void move_robot(){
 void push_robot_up(){
     if(!is_top_wall_collision() && !is_charging_station_collision()){
         robot_y_pos--;
+        manual_control = true;
     }
 }
 
 void push_robot_left(){
     if(!is_left_wall_collision() && !is_charging_station_collision()){
         robot_x_pos--;
+        manual_control = true;
     }
 }
 
 void push_robot_right(){
     if(!is_right_wall_collision() && !is_charging_station_collision()){
         robot_x_pos++;
+        manual_control = true;
     }
 }
 
 void push_robot_down(){
     if(!is_bottom_wall_collision() && !is_charging_station_collision()){
         robot_y_pos++;
+        manual_control = true;
     }
 }
 
