@@ -12,9 +12,19 @@
 #include "gui.h"
 #include "input_control.h"
 #include "room.h"
+#include "helpers.h"
 
+static bool quit_game;
+static int delay;
+
+void set_delay(){
+    int input = get_int("Set the new loop delay: ");
+    delay = input;
+}
 
 void loop(){
+    char input = get_char();
+    process_input(input);
     clear_screen();
     update_timer();
     update_battery();
@@ -25,7 +35,20 @@ void loop(){
     set_time_at_last_loop();
 }
 
+void reset(){
+    start_timer();
+    init_robot();
+    init_room();
+    draw_robot();
+    draw_room();
+}
+
+void quit(){
+    quit_game = true;
+}
+
 int main(){
+    delay = 50;
 
     setup_screen();
     show_screen();
@@ -34,11 +57,13 @@ int main(){
     init_room();
     draw_robot();
     draw_room();
-    while (1) {
-        char input = get_char();
-        process_input(input);
+
+    quit_game = false;
+
+    while (!quit_game) {
+
         loop();
-        timer_pause(50);
+        timer_pause(delay);
     }
 
     return 0;

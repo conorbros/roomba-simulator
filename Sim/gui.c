@@ -7,6 +7,9 @@
 
 #include "robot.h"
 #include "drawing.h"
+#include "main.h"
+#include "helpers.h"
+#include "room.h"
 
 static int width;
 static int height;
@@ -166,4 +169,38 @@ void draw_gui(){
     draw_command_window();
     draw_status_display();
     draw_status_items();
+}
+
+
+void fill_rect(int x1, int y1, int x2, int y2, char c){
+    if (x2 - x1 < 0 || y2 - y1 < 0) return;
+    for (int i = x1; i <= x2; i++){
+        for (int j = y1; j <= y2; j++){
+            draw_char(i, j, c);
+        }
+    }
+}
+
+void simulation_over_message(){
+    draw_gui();
+    draw_room();
+    draw_robot();
+    draw_rect((width / 2) - 40, (height / 2) - 10, (width / 2) + 40, (height / 2) + 10, '#');
+    fill_rect((width / 2) - 39, (height / 2) - 9, (width / 2) + 39, (height / 2) + 9, ' ');
+
+    draw_string((width / 2) - 23, height / 2, "SIMULATION OVER! Press r to reset or q to quit.");
+
+    show_screen();
+    int input;
+    while(1){
+        input = get_char();
+        if (input == 'r'){
+            reset();
+            break;
+        }
+        if (input == 'q'){
+            quit();
+            break;
+        }
+    }
 }

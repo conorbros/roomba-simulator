@@ -7,6 +7,8 @@
 
 #include "gui.h"
 #include "robot.h"
+#include "main.h"
+#include "helpers.h"
 
 static int width;
 static int height;
@@ -32,7 +34,6 @@ void write_help_instructions(){
 }
 
 void display_help_screen(){
-    get_screen_size(&width, &height);
     clear_screen();
     write_help_instructions();
     show_screen();
@@ -43,11 +44,7 @@ void display_help_screen(){
 }
 
 void process_input(char input){
-    int width, height;
     get_screen_size(&width, &height);
-
-    //echo char to command window
-    draw_char(width / 2, height - 2, input);
 
     switch (input)
     {
@@ -63,12 +60,12 @@ void process_input(char input){
 
         //set the millisecond delay between successive invocations of the loop function.
         case 'm':
-
+            set_delay();
             break;
 
         //set the time-out period, that is, the total permitted run time, measured in seconds.
         case 'o':
-
+            set_delay();
             break;
 
         //cause the device to start moving (if it is stationary) or stop moving (if it is mobile).
@@ -78,12 +75,12 @@ void process_input(char input){
 
         //quit simulation.
         case 'q':
-
+            quit();
             break;
 
         //reset simulation.
         case 'r':
-
+            reset();
             break;
 
         //drop a piece of slime (medium rubbish) on the floor.
@@ -98,7 +95,7 @@ void process_input(char input){
 
         //move the device to a new location and specify a new direction.
         case 'v':
-
+            set_robot_location_and_direction();
             break;
 
         //change the amount (weight) of the rubbish currently on board the device.
@@ -108,7 +105,7 @@ void process_input(char input){
 
         //change the battery level of the device.
         case 'y':
-
+            set_robot_battery();
             break;
         //push up
         case 'i':

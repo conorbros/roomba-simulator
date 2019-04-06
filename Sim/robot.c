@@ -8,6 +8,9 @@
 #include "gui.h"
 #include "room.h"
 #include "collision.h"
+#include "helpers.h"
+
+static int robot_side = 9;
 
 static int robot_battery;
 static int seconds_of_charging;
@@ -20,6 +23,7 @@ static bool robot_moving;
 static bool manual_control;
 static bool return_to_base;
 static bool docked;
+static bool robot_turned;
 
 static double base_dx;
 static double base_dy;
@@ -44,12 +48,55 @@ int get_robot_battery(){
     return robot_battery;
 }
 
+void set_robot_battery(){
+    int input = get_int("Set the robot's battery: ");
+
+    if(input > 100) input = 100;
+    if(input < 0) input = 0;
+
+    robot_battery = input;
+}
+
+bool is_robot_docked(){
+    return docked;
+}
+
 double get_robot_direction(){
     return robot_direction;
 }
 
 void toggle_robot_moving(){
     robot_moving = !robot_moving;
+}
+
+// TODO: CHECK WONT COLLIDE WITH CHARGING STATION
+void set_robot_x_pos(){
+    int x_pos = get_int("Set robot X position: ");
+    if(x_pos <= 0) x_pos = 1;
+    if(x_pos >= get_screen_width()) x_pos = get_screen_width()- 1;
+
+    robot_x_pos = x_pos;
+}
+
+// TODO: CHECK WONT COLLIDE WITH CHARGING STATION
+void set_robot_y_pos(){
+    int y_pos = get_int("Set robot Y position: ");
+    if(y_pos <= 7) y_pos = 7;
+    if(y_pos <= get_screen_height() - 3) y_pos = get_screen_height() - 4;
+
+    robot_y_pos = y_pos;
+}
+
+void set_robot_direction(){
+    int direction = get_int("Set robot direction: ");
+    if(direction > 360 || direction < 0) direction = 0;
+    robot_direction = direction;
+}
+
+void set_robot_location_and_direction(){
+    set_robot_x_pos();
+    set_robot_y_pos();
+    set_robot_direction();
 }
 
 void set_robot_return_to_base(){
@@ -62,30 +109,44 @@ void set_robot_return_to_base(){
     base_dy = t2 * 0.35 /d;
 }
 
+void increment_battery(){
+    robot_battery++;
+    if (robot_battery > 100){
+        robot_battery = 100;
+    }
+}
+
+void decrement_battery(){
+    robot_battery--;
+    if (robot_battery < 0){
+        robot_battery = 0;
+    }
+}
+
+void docking_control(){
+    if(floor(get_current_time())  >= get_time_at_last_loop() + 30.00 ) increment_battery();
+
+    if (robot_battery == 100){
+        docked = false;
+        robot_moving = true;
+        robot_battery = 100;
+        seconds_of_charging = 0;
+        return_to_base = false;
+    }
+}
+
 void update_battery(){
-    if(!docked && (floor(get_current_time()) - get_time_start() > get_time_at_last_loop())){
-        robot_battery--;
-    }
+    if(!docked && (floor(get_current_time()) - get_time_start() > get_time_at_last_loop())) robot_battery--;
 
-    if(docked){
-        if (seconds_of_charging > 3){
-            docked = false;
-            robot_moving = true;
-            robot_battery = 100;
-            seconds_of_charging = 0;
-        }
+    if(docked) docking_control();
 
-        if(floor(get_current_time()) - get_time_start() > get_time_at_last_loop()){
-            seconds_of_charging ++;
-        }
-    }
+    if(robot_battery <= 25) set_robot_return_to_base();
 
-    if(robot_battery <= 25){ return_to_base = true;}
-    if(robot_battery == 0){ robot_moving = false;}
+    if(robot_battery == 0) simulation_over_message();
 }
 
 void draw_robot(){
-    draw_pixels(robot_x_pos, robot_y_pos, 9, 9, robot, true);
+    draw_pixels(robot_x_pos, robot_y_pos, robot_side, robot_side, robot, true);
 }
 
 int RandRange(int Min, int Max){
@@ -100,31 +161,38 @@ double swivel_robot(){
 }
 
 bool left_side_charging_station(){
-    return (robot_x_pos + 11 >= (double)get_charging_station_x_position() 
-        && robot_y_pos <= (double)get_charging_station_y_position() + 4);
-    
+    return (robot_x_pos < (double)get_charging_station_x_position() && robot_x_pos + 10 > (double)get_charging_station_x_position()
+        && robot_y_pos < (double)get_charging_station_y_position() + 2);
 }
 
 bool right_side_charging_station(){
-    return (robot_x_pos - 1 <= (double)get_charging_station_x_position() + 10 
-        && robot_y_pos <= (double)get_charging_station_y_position() + 4);
+    return (robot_x_pos - 1 <= (double)get_charging_station_x_position() + 9
+        && robot_x_pos + robot_side > (double)get_charging_station_x_position() + 9
+        && robot_y_pos <= (double)get_charging_station_y_position() + 2);
 }
 
 bool bottom_side_charging_station(){
-    return ((robot_x_pos - 1 <= (double)get_charging_station_x_position() 
-                || robot_x_pos + 11 >= (double)get_charging_station_x_position()) &&
-        (robot_y_pos <= (double)get_charging_station_y_position() + 4)); 
+
+    if (robot_x_pos < (double)get_charging_station_x_position()
+        && robot_x_pos + robot_side > (double)get_charging_station_x_position()
+        && robot_y_pos < (double)get_charging_station_y_position() + 4) return true;
+
+    if (robot_x_pos < (double)get_charging_station_x_position() + robot_side
+        && robot_x_pos + robot_side > (double)get_charging_station_x_position() + 9
+        && robot_y_pos < (double)get_charging_station_y_position() + 4) return true;
+
+    return false;
 }
 
 bool is_charging_station_collision(){
     return pixel_collision(
-        robot_x_pos - 1, robot_y_pos - 1, 11, 11, robot,
+        robot_x_pos - 1, robot_y_pos - 1, robot_side, robot_side, robot,
         get_charging_station_x_position(), get_charging_station_y_position(), 9, 3, get_charging_station()
     );
 }
 
 bool is_left_wall_collision(){
-    return (0 >= robot_x_pos - 1);
+    return (1 >= robot_x_pos - 1);
 }
 
 bool is_top_wall_collision(){
@@ -132,7 +200,8 @@ bool is_top_wall_collision(){
 }
 
 bool is_bottom_wall_collision(){
-    return (get_screen_height() - 4 < robot_y_pos + 10);
+    if (manual_control) return (get_screen_height() - 4 < robot_y_pos + 10);
+    return (get_screen_height() - 4 < robot_y_pos + 9);
 }
 
 bool is_right_wall_collision(){
@@ -141,19 +210,15 @@ bool is_right_wall_collision(){
 
 bool is_wall_collision(){
     return (is_left_wall_collision() || is_top_wall_collision() ||
-        is_right_wall_collision() || is_bottom_wall_collision());
+       is_right_wall_collision() || is_bottom_wall_collision());
 }
 
 void move_robot(){
-    if(robot_moving){
 
-        if(is_wall_collision() || (is_charging_station_collision() && !return_to_base) || docked){
-            robot_direction = swivel_robot();
-        }
-
+    if(robot_moving && !manual_control){
 
         if(return_to_base){
-            if(!is_charging_station_collision() && !manual_control){
+            if(!is_charging_station_collision()){
                 robot_x_pos += base_dx;
                 robot_y_pos += base_dy;
             }else{
@@ -161,41 +226,48 @@ void move_robot(){
                 docked = true;
             }
 
-        }else if(!manual_control){
+        }else if((is_wall_collision() || is_charging_station_collision())
+            && !robot_turned){
+            robot_direction = swivel_robot();
+            robot_turned = true;
+            draw_robot();
+            return;
+        }else{
+            robot_turned = false;
             robot_x_pos += velocity * cos(robot_direction * M_PI / 180);
             robot_y_pos += velocity * sin(robot_direction * M_PI / 180);
         }
-
     }
+
     draw_robot();
     manual_control = false;
 }
 
 void push_robot_up(){
-    if(!is_top_wall_collision() && !is_charging_station_collision()){
+    manual_control = true;
+    if(!is_top_wall_collision() && !bottom_side_charging_station()){
         robot_y_pos--;
-        manual_control = true;
     }
 }
 
 void push_robot_left(){
-    if(!is_left_wall_collision() && !is_charging_station_collision()){
+    manual_control = true;
+    if(!is_left_wall_collision() && !right_side_charging_station()){
         robot_x_pos--;
-        manual_control = true;
     }
 }
 
 void push_robot_right(){
-    if(!is_right_wall_collision() && !is_charging_station_collision()){
+    manual_control = true;
+    if(!is_right_wall_collision() && !left_side_charging_station()){
         robot_x_pos++;
-        manual_control = true;
     }
 }
 
 void push_robot_down(){
-    if(!is_bottom_wall_collision() && !is_charging_station_collision()){
+    manual_control = true;
+    if(!is_bottom_wall_collision()){
         robot_y_pos++;
-        manual_control = true;
     }
 }
 
@@ -203,11 +275,15 @@ void init_robot(){
     int width;
     int height;
     get_screen_size(&width, &height);
+
     robot_battery = 100;
-    robot_x_pos = width / 2;
-    robot_y_pos = height / 2;
+    robot_x_pos = (width / 2) - 4;
+    robot_y_pos = (height / 2) - 4;
+
     robot_moving = false;
     robot_direction = 90;
+
     seconds_of_charging = 0;
     manual_control = false;
+    return_to_base = false;
 }

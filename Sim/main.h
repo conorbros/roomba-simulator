@@ -5,8 +5,12 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-void write_help_instructions();
+void set_delay();
 
-void display_help_screen();
+void loop();
 
-void process_input(char input);
+void reset();
+
+void quit();
+
+int main();

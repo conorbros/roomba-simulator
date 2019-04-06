@@ -34,3 +34,5 @@ void draw_status_item(char string[], int row, int column);
 void draw_status_items();
 
 void draw_gui();
+
+void simulation_over_message();

@@ -8,9 +8,21 @@
 
 int get_robot_battery();
 
+void set_robot_battery();
+
+bool is_robot_docked();
+
 double get_robot_direction();
 
 void toggle_robot_moving();
+
+void set_robot_x_pos();
+
+void set_robot_y_pos();
+
+void set_robot_direction();
+
+void set_robot_location_and_direction();
 
 void set_robot_return_to_base();
 
