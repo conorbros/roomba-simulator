@@ -36,3 +36,5 @@ void draw_status_items();
 void draw_gui();
 
 void simulation_over_message();
+
+void simulation_quit_message();

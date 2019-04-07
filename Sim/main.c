@@ -14,7 +14,7 @@
 #include "room.h"
 #include "helpers.h"
 
-static bool quit_game;
+static bool simulation_quit;
 static int delay;
 
 void set_delay(){
@@ -44,7 +44,7 @@ void reset(){
 }
 
 void quit(){
-    quit_game = true;
+    simulation_quit = true;
 }
 
 int main(){
@@ -58,13 +58,14 @@ int main(){
     draw_robot();
     draw_room();
 
-    quit_game = false;
+    simulation_quit = false;
 
-    while (!quit_game) {
+    while (!simulation_quit) {
 
         loop();
         timer_pause(delay);
     }
 
+    simulation_quit_message();
     return 0;
 }

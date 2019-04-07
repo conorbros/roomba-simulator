@@ -181,16 +181,19 @@ void fill_rect(int x1, int y1, int x2, int y2, char c){
     }
 }
 
-void simulation_over_message(){
+void draw_status_rect(){
     draw_gui();
     draw_room();
     draw_robot();
     draw_rect((width / 2) - 40, (height / 2) - 10, (width / 2) + 40, (height / 2) + 10, '#');
     fill_rect((width / 2) - 39, (height / 2) - 9, (width / 2) + 39, (height / 2) + 9, ' ');
+}
 
+void simulation_over_message(){
+    draw_status_rect()
     draw_string((width / 2) - 23, height / 2, "SIMULATION OVER! Press r to reset or q to quit.");
-
     show_screen();
+
     int input;
     while(1){
         input = get_char();
@@ -202,5 +205,15 @@ void simulation_over_message(){
             quit();
             break;
         }
+    }
+}
+
+void simulation_quit_message(){
+    draw_status_rect()
+    draw_string((width / 2) - 21, height / 2, "SIMULATION ENDING... Press any key to exit");
+    show_screen();
+
+    while(!wait_char()){
+        continue;
     }
 }

@@ -10,19 +10,22 @@
 #include "collision.h"
 #include "helpers.h"
 
-static int robot_side = 9;
+static int width;
+static int height;
 
 static int robot_battery;
-static int seconds_of_charging;
+static int robot_weight;
 
 static double robot_x_pos;
 static double robot_y_pos;
 static double robot_direction;
+static int robot_side = 9;
 
 static bool robot_moving;
 static bool manual_control;
 static bool return_to_base;
 static bool docked;
+static int seconds_of_charging;
 static bool robot_turned;
 
 static double base_dx;
@@ -51,10 +54,25 @@ int get_robot_battery(){
 void set_robot_battery(){
     int input = get_int("Set the robot's battery: ");
 
+    input++;
+
     if(input > 100) input = 100;
     if(input < 0) input = 0;
 
     robot_battery = input;
+}
+
+int get_robot_weight(){
+    return robot_weight;
+}
+
+void set_robot_weight(){
+    int input = get_int("Set the robot's current weight: ");
+    if (input < 0){
+        input = 0;
+    }
+
+    robot_weight = input;
 }
 
 bool is_robot_docked(){
@@ -72,8 +90,12 @@ void toggle_robot_moving(){
 // TODO: CHECK WONT COLLIDE WITH CHARGING STATION
 void set_robot_x_pos(){
     int x_pos = get_int("Set robot X position: ");
-    if(x_pos <= 0) x_pos = 1;
-    if(x_pos >= get_screen_width()) x_pos = get_screen_width()- 1;
+
+    if(x_pos <= 0) {
+        x_pos = 1;
+    }else if(x_pos + robot_side >= width) {
+        x_pos = width - (robot_side + 1);
+    }
 
     robot_x_pos = x_pos;
 }
@@ -81,8 +103,11 @@ void set_robot_x_pos(){
 // TODO: CHECK WONT COLLIDE WITH CHARGING STATION
 void set_robot_y_pos(){
     int y_pos = get_int("Set robot Y position: ");
-    if(y_pos <= 7) y_pos = 7;
-    if(y_pos <= get_screen_height() - 3) y_pos = get_screen_height() - 4;
+    if(y_pos <= 7) {
+        y_pos = 7;
+    }else if(y_pos + robot_side >= height - 3) {
+        y_pos = height - (robot_side + 4);
+    }
 
     robot_y_pos = y_pos;
 }
@@ -97,6 +122,7 @@ void set_robot_location_and_direction(){
     set_robot_x_pos();
     set_robot_y_pos();
     set_robot_direction();
+    manual_control = true;
 }
 
 void set_robot_return_to_base(){
@@ -126,6 +152,8 @@ void decrement_battery(){
 void docking_control(){
     if(floor(get_current_time())  >= get_time_at_last_loop() + 30.00 ) increment_battery();
 
+    draw_string((width / 2) - 3, height - 2, "DOCKED");
+
     if (robot_battery == 100){
         docked = false;
         robot_moving = true;
@@ -136,7 +164,9 @@ void docking_control(){
 }
 
 void update_battery(){
-    if(!docked && (floor(get_current_time()) - get_time_start() > get_time_at_last_loop())) robot_battery--;
+    if(robot_moving && !docked && (floor(get_current_time()) - get_time_start() > get_time_at_last_loop())){
+        decrement_battery();
+    }
 
     if(docked) docking_control();
 
@@ -272,11 +302,10 @@ void push_robot_down(){
 }
 
 void init_robot(){
-    int width;
-    int height;
     get_screen_size(&width, &height);
 
     robot_battery = 100;
+    robot_weight = 0;
     robot_x_pos = (width / 2) - 4;
     robot_y_pos = (height / 2) - 4;
 
