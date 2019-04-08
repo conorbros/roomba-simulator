@@ -159,7 +159,7 @@ void draw_status_items(){
     draw_status_item(weight, 2, 2);
 
     char rubbish[13];
-    sprintf(rubbish, "%d, %d, %d", 0, 0, 0);
+    sprintf(rubbish, "%d, %d, %d", get_dust_count(), 0, 0);
     draw_status_item(rubbish, 2, 3);
 }
 
@@ -190,7 +190,7 @@ void draw_status_rect(){
 }
 
 void simulation_over_message(){
-    draw_status_rect()
+    draw_status_rect();
     draw_string((width / 2) - 23, height / 2, "SIMULATION OVER! Press r to reset or q to quit.");
     show_screen();
 
@@ -209,7 +209,7 @@ void simulation_over_message(){
 }
 
 void simulation_quit_message(){
-    draw_status_rect()
+    draw_status_rect();
     draw_string((width / 2) - 21, height / 2, "SIMULATION ENDING... Press any key to exit");
     show_screen();
 

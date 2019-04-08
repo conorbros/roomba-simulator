@@ -7,7 +7,7 @@
 
 #include "gui.h"
 #include "room.h"
-#include "collision.h"
+#include "misc.h"
 #include "helpers.h"
 
 static int width;
@@ -16,10 +16,10 @@ static int height;
 static int robot_battery;
 static int robot_weight;
 
-static double robot_x_pos;
-static double robot_y_pos;
-static double robot_direction;
-static int robot_side = 9;
+static int robot_x_pos;
+static int robot_y_pos;
+static int robot_direction;
+int robot_side = 9;
 
 static bool robot_moving;
 static bool manual_control;
@@ -46,6 +46,18 @@ static char * robot =
     "@=\\___/=@"
     " @=====@ "
     "  @@@@@  ";
+
+char* get_robot(){
+    return robot;
+}
+
+int get_robot_x_pos(){
+    return (int)robot_x_pos;
+}
+
+int get_robot_y_pos(){
+    return (int) robot_y_pos;
+}
 
 int get_robot_battery(){
     return robot_battery;
@@ -179,37 +191,32 @@ void draw_robot(){
     draw_pixels(robot_x_pos, robot_y_pos, robot_side, robot_side, robot, true);
 }
 
-int RandRange(int Min, int Max){
-    int diff = Max-Min;
-    return (int) (((double)(diff+1)/RAND_MAX) * rand() + Min);
-}
-
 double swivel_robot(){
-    int new_facing = RandRange(0, 30) + 30;
+    int new_facing = random_range(0, 30) + 30;
     int returnVal = ((int)robot_direction + new_facing) % 360;
     return returnVal;
 }
 
 bool left_side_charging_station(){
-    return (robot_x_pos < (double)get_charging_station_x_position() && robot_x_pos + 10 > (double)get_charging_station_x_position()
-        && robot_y_pos < (double)get_charging_station_y_position() + 2);
+    return (robot_x_pos < get_charging_station_x_position() && robot_x_pos + 10 > get_charging_station_x_position()
+        && robot_y_pos < get_charging_station_y_position() + 2);
 }
 
 bool right_side_charging_station(){
-    return (robot_x_pos - 1 <= (double)get_charging_station_x_position() + 9
-        && robot_x_pos + robot_side > (double)get_charging_station_x_position() + 9
-        && robot_y_pos <= (double)get_charging_station_y_position() + 2);
+    return (robot_x_pos - 1 <= get_charging_station_x_position() + 9
+        && robot_x_pos + robot_side > get_charging_station_x_position() + 9
+        && robot_y_pos <= get_charging_station_y_position() + 2);
 }
 
 bool bottom_side_charging_station(){
 
-    if (robot_x_pos < (double)get_charging_station_x_position()
-        && robot_x_pos + robot_side > (double)get_charging_station_x_position()
-        && robot_y_pos < (double)get_charging_station_y_position() + 4) return true;
+    if (robot_x_pos < get_charging_station_x_position()
+        && robot_x_pos + robot_side > get_charging_station_x_position()
+        && robot_y_pos < get_charging_station_y_position() + 4) return true;
 
-    if (robot_x_pos < (double)get_charging_station_x_position() + robot_side
-        && robot_x_pos + robot_side > (double)get_charging_station_x_position() + 9
-        && robot_y_pos < (double)get_charging_station_y_position() + 4) return true;
+    if (robot_x_pos < get_charging_station_x_position() + robot_side
+        && robot_x_pos + robot_side > get_charging_station_x_position() + 9
+        && robot_y_pos < get_charging_station_y_position() + 4) return true;
 
     return false;
 }
@@ -222,7 +229,7 @@ bool is_charging_station_collision(){
 }
 
 bool is_left_wall_collision(){
-    return (1 >= robot_x_pos - 1);
+    return (2 >= robot_x_pos - 1);
 }
 
 bool is_top_wall_collision(){

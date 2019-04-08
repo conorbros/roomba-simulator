@@ -5,6 +5,12 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
+int get_dust_count();
+
+void drop_dust(int x, int y);
+
+void drop_dust_input();
+
 int get_charging_station_x_position();
 
 int get_charging_station_y_position();

@@ -9,6 +9,7 @@
 #include "robot.h"
 #include "main.h"
 #include "helpers.h"
+#include "room.h"
 
 static int width;
 static int height;
@@ -55,7 +56,7 @@ void process_input(char input){
 
         //drop a piece of dust (small rubbish) on the floor.
         case 'd':
-
+            drop_dust_input();
             break;
 
         //set the millisecond delay between successive invocations of the loop function.

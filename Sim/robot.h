@@ -5,10 +5,19 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
+char* get_robot();
+
+int get_robot_x_pos();
+
+int get_robot_y_pos();
 
 int get_robot_battery();
 
 void set_robot_battery();
+
+int get_robot_weight();
+
+void set_robot_weight();
 
 bool is_robot_docked();
 
@@ -29,8 +38,6 @@ void set_robot_return_to_base();
 void update_battery();
 
 void draw_robot();
-
-int RandRange(int Min, int Max);
 
 double swivel_robot();
 

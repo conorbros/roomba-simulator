@@ -47,14 +47,23 @@ void quit(){
     simulation_quit = true;
 }
 
+void room_setup(){
+    int dust = get_int("How much dust: ");
+
+    if (dust < 0) dust = 0;
+    if (dust > 1000) dust = 1000;
+
+    init_room(dust);
+}
+
 int main(){
     delay = 50;
 
     setup_screen();
     show_screen();
+    room_setup();
     start_timer();
     init_robot();
-    init_room();
     draw_robot();
     draw_room();
 
