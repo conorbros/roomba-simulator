@@ -6,13 +6,11 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-// Insert other functions here, or include header files
-
-#include "robot.h"
-#include "gui.h"
-#include "input_control.h"
-#include "room.h"
-#include "helpers.h"
+#include <robot.h>
+#include <gui.h>
+#include <input_control.h>
+#include <room.h>
+#include <helpers.h>
 
 static bool simulation_quit;
 static int delay;

@@ -5,11 +5,11 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-#include "robot.h"
-#include "drawing.h"
-#include "main.h"
-#include "helpers.h"
-#include "room.h"
+#include <robot.h>
+#include <drawing.h>
+#include <main.h>
+#include <helpers.h>
+#include <room.h>
 
 static int width;
 static int height;

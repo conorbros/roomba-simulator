@@ -5,14 +5,13 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-#include "gui.h"
-#include "room.h"
-#include "misc.h"
-#include "helpers.h"
+#include <gui.h>
+#include <room.h>
+#include <misc.h>
+#include <helpers.h>
 
 static int width;
 static int height;
-
 static int robot_battery;
 static int robot_weight;
 
@@ -251,7 +250,6 @@ bool is_wall_collision(){
 }
 
 void move_robot(){
-
     if(robot_moving && !manual_control){
 
         if(return_to_base){
