@@ -155,7 +155,7 @@ void draw_status_items(){
     draw_status_item(time_output, 2, 1);
 
     char weight[11];
-    sprintf(weight, "Weight: %dg", 0);
+    sprintf(weight, "Weight: %dg", get_robot_weight());
     draw_status_item(weight, 2, 2);
 
     char rubbish[13];

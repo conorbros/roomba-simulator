@@ -19,6 +19,7 @@ static int charging_station_y_position;
 static int dust_x_positions[1000];
 static int dust_y_positions[1000];
 static int dust_count;
+static int dust_weight = 1;
 
 /*
 static int slime_x_positions[10];
@@ -53,8 +54,8 @@ int * get_dust_y_positions(){
     return dust_y_positions;
 }
 
-bool dust_will_overlap(int x, int y, int count){
-    for(int i = 0; i < count; i++){
+bool dust_will_overlap(int x, int y){
+    for(int i = 0; i < dust_count; i++){
         if(dust_x_positions[i] == x && dust_y_positions[i] == y) return true;
     }
 
@@ -65,7 +66,7 @@ bool dust_will_overlap(int x, int y, int count){
     if(pixel_collision(x, y, 1, 1, dust,
         get_robot_x_pos(), get_robot_y_pos(), 9, 9, get_robot())){
             return true;
-        }
+        };
     return false;
 }
 
@@ -90,9 +91,21 @@ void drop_dust_input(){
     drop_dust(x_pos, y_pos);
 }
 
+void pickup_dust(int index){
+    int i;
+    for(i = index; i < dust_count - 1; i++) {
+        dust_x_positions[i] = dust_x_positions[i + 1];
+        dust_y_positions[i] = dust_y_positions[i + 1];
+    }
+
+    dust_count--;
+
+    robot_pickup_rubbish(dust_weight);
+}
+
 void draw_dust(){
     for(int i = 0; i < dust_count; i++){
-        draw_char(dust_x_positions[i], dust_y_positions[i], '.');
+        draw_char(dust_x_positions[i], dust_y_positions[i], dust);
     }
 }
 

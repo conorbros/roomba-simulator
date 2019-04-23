@@ -19,6 +19,8 @@ int get_robot_weight();
 
 void set_robot_weight();
 
+void robot_pickup_rubbish(int weight);
+
 bool is_robot_docked();
 
 double get_robot_direction();

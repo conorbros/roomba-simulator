@@ -17,6 +17,8 @@ void drop_dust(int x, int y);
 
 void drop_dust_input();
 
+void pickup_dust(int index);
+
 int get_charging_station_x_position();
 
 int get_charging_station_y_position();

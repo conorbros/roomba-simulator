@@ -86,6 +86,12 @@ void set_robot_weight(){
     robot_weight = input;
 }
 
+void robot_pickup_rubbish(int weight){
+    robot_weight += weight;
+
+    if(robot_weight > 45) return_to_base = true;
+}
+
 bool is_robot_docked(){
     return docked;
 }
@@ -171,6 +177,7 @@ void docking_control(){
         robot_battery = 100;
         seconds_of_charging = 0;
         return_to_base = false;
+        robot_weight = 0;
     }
 }
 
@@ -180,7 +187,6 @@ void update_battery(){
     }
 
     if(docked) docking_control();
-
     if(robot_battery <= 25) set_robot_return_to_base();
 
     if(robot_battery == 0) simulation_over_message();
@@ -313,9 +319,11 @@ void dust_collision(){
 
     for(int i = 0; i < count; i++){
         if(pixel_collision(
-            robot_x_pos, robot_y_pos, robot_side, robot_side,
-
-        ))
+            robot_x_pos, robot_y_pos, robot_side, robot_side, robot,
+            dust_x[i], dust_y[i], 1, 1, dust
+        )){
+            pickup_dust(i);
+        }
     }
 
 }
