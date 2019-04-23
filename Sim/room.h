@@ -7,6 +7,12 @@
 
 int get_dust_count();
 
+char * get_dust();
+
+int * get_dust_x_positions();
+
+int * get_dust_y_positions();
+
 void drop_dust(int x, int y);
 
 void drop_dust_input();

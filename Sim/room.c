@@ -20,6 +20,17 @@ static int dust_x_positions[1000];
 static int dust_y_positions[1000];
 static int dust_count;
 
+/*
+static int slime_x_positions[10];
+static int slime_y_positions[10];
+static int slime_count;
+
+static int trash_x_positions[5];
+static int trash_y_positions[5];
+static int trash_count;
+*/
+static char * dust = ".";
+
 static char * charging_station =
     "#########"
     "#########"
@@ -30,16 +41,28 @@ int get_dust_count(){
     return dust_count;
 }
 
+char * get_dust(){
+    return dust;
+}
+
+int * get_dust_x_positions(){
+    return dust_x_positions;
+}
+
+int * get_dust_y_positions(){
+    return dust_y_positions;
+}
+
 bool dust_will_overlap(int x, int y, int count){
     for(int i = 0; i < count; i++){
         if(dust_x_positions[i] == x && dust_y_positions[i] == y) return true;
     }
 
-    if (pixel_collision(x, y, 1, 1, ".",
+    if (pixel_collision(x, y, 1, 1, dust,
         charging_station_x_position, charging_station_y_position, 9, 3, charging_station)){
             return true;
         };
-    if(pixel_collision(x, y, 1, 1, ".",
+    if(pixel_collision(x, y, 1, 1, dust,
         get_robot_x_pos(), get_robot_y_pos(), 9, 9, get_robot())){
             return true;
         }

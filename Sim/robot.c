@@ -15,8 +15,8 @@ static int height;
 static int robot_battery;
 static int robot_weight;
 
-static int robot_x_pos;
-static int robot_y_pos;
+static double robot_x_pos;
+static double robot_y_pos;
 static int robot_direction;
 int robot_side = 9;
 
@@ -273,7 +273,6 @@ void move_robot(){
             robot_y_pos += velocity * sin(robot_direction * M_PI / 180);
         }
     }
-
     draw_robot();
     manual_control = false;
 }
@@ -304,6 +303,30 @@ void push_robot_down(){
     if(!is_bottom_wall_collision()){
         robot_y_pos++;
     }
+}
+
+void dust_collision(){
+    int * dust_x = get_dust_x_positions();
+    int * dust_y = get_dust_y_positions();
+    int count = get_dust_count();
+    char * dust = get_dust();
+
+    for(int i = 0; i < count; i++){
+        if(pixel_collision(
+            robot_x_pos, robot_y_pos, robot_side, robot_side,
+
+        ))
+    }
+
+}
+
+void rubbish_collision(){
+    dust_collision();
+}
+
+void update_robot(){
+    move_robot();
+    rubbish_collision();
 }
 
 void init_robot(){

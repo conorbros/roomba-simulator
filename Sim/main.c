@@ -28,7 +28,7 @@ void loop(){
     update_battery();
     draw_gui();
     draw_room();
-    move_robot();
+    update_robot();
     show_screen();
     set_time_at_last_loop();
 }

@@ -53,7 +53,7 @@ bool is_right_wall_collision();
 
 void is_wall_collision();
 
-void move_robot();
+void update_robot();
 
 void push_robot_up();
 
@@ -62,5 +62,7 @@ void push_robot_left();
 void push_robot_right();
 
 void push_robot_down();
+
+void update_robot();
 
 void init_robot();
