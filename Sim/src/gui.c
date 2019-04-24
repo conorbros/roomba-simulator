@@ -159,7 +159,7 @@ void draw_status_items(){
     draw_status_item(weight, 2, 2);
 
     char rubbish[13];
-    sprintf(rubbish, "%d, %d, %d", get_dust_count(), get_slime_count(), 0);
+    sprintf(rubbish, "%d, %d, %d", get_dust_count(), get_slime_count(), get_trash_count());
     draw_status_item(rubbish, 2, 3);
 }
 

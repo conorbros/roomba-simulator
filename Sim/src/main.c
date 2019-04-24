@@ -20,6 +20,22 @@ void set_delay(){
     delay = input;
 }
 
+void room_setup(){
+    int dust = get_int("How much dust: ");
+    if (dust < 0) dust = 0;
+    if (dust > 1000) dust = 1000;
+
+    int slime = get_int("How much slime: ");
+    if (slime < 0) slime = 0;
+    //if (slime > 10) slime = 10;
+
+    int trash = get_int("How much trash: ");
+    if (trash < 0) trash = 0;
+    //if (trash > 5) trash = 5;
+
+    init_room(dust, slime, trash);
+}
+
 void loop(){
     char input = get_char();
     process_input(input);
@@ -34,30 +50,16 @@ void loop(){
 }
 
 void reset(){
+    room_setup();
     start_timer();
     init_robot();
-    init_room();
+    init_rubbish();
     draw_robot();
     draw_room();
 }
 
 void quit(){
     simulation_quit = true;
-}
-
-
-void room_setup(){
-    int dust = get_int("How much dust: ");
-
-    if (dust < 0) dust = 0;
-    if (dust > 1000) dust = 1000;
-
-    int slime = get_int("How much slime: ");
-
-    if (slime < 0) slime = 0;
-    if (slime > 10) slime = 10;
-
-    init_room(dust, slime);
 }
 
 int main(){

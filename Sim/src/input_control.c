@@ -66,7 +66,7 @@ void process_input(char input){
 
         //set the time-out period, that is, the total permitted run time, measured in seconds.
         case 'o':
-            set_delay();
+            
             break;
 
         //cause the device to start moving (if it is stationary) or stop moving (if it is mobile).
@@ -86,12 +86,12 @@ void process_input(char input){
 
         //drop a piece of slime (medium rubbish) on the floor.
         case 's':
-
+            drop_slime_input();
             break;
 
         //drop a piece of trash (large rubbish) on the floor.
         case 't':
-
+            drop_dust_input();
             break;
 
         //move the device to a new location and specify a new direction.
@@ -101,7 +101,7 @@ void process_input(char input){
 
         //change the amount (weight) of the rubbish currently on board the device.
         case 'w':
-
+            set_robot_weight();
             break;
 
         //change the battery level of the device.

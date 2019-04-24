@@ -24,9 +24,9 @@ static bool robot_moving;
 static bool manual_control;
 static bool return_to_base;
 static bool docked;
-static int seconds_of_charging;
 static bool robot_turned;
 
+static int seconds_of_charging;
 static double base_dx;
 static double base_dy;
 
@@ -79,9 +79,8 @@ int get_robot_weight(){
 
 void set_robot_weight(){
     int input = get_int("Set the robot's current weight: ");
-    if (input < 0){
-        input = 0;
-    }
+    if (input < 0) input = 0;
+    if (input > 65) input = 65;
 
     robot_weight = input;
 }
@@ -344,10 +343,34 @@ void slime_collision(){
     }
 }
 
+void trash_collision(){
+    int * trash_x = get_trash_x_positions();
+    int * trash_y = get_trash_y_positions();
+    int count = get_trash_count();
+    int trash_width = get_trash_width();
+    int trash_height = get_trash_height();
+    char * trash = get_trash();
+
+    for(int i = 0; i < count; i++){
+        if(pixel_collision(
+            robot_x_pos, robot_y_pos, robot_side, robot_side, robot,
+            trash_x[i], trash_y[i], trash_width, trash_height, trash
+        )){
+            pickup_trash(i);
+        }
+    }
+}
 
 void rubbish_collision(){
-    dust_collision();
-    slime_collision();
+
+    if(!return_to_base){
+        dust_collision();
+        slime_collision();
+    }
+
+    if(robot_weight >= 45) {
+        set_robot_return_to_base();
+    }
 }
 
 void update_robot(){

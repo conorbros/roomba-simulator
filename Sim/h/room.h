@@ -29,7 +29,25 @@ int * get_slime_y_positions();
 
 int * get_slime_x_positions();
 
+void drop_slime_input();
+
 void pickup_slime(int index);
+
+int get_trash_count();
+
+int get_trash_width();
+
+int get_trash_height();
+
+char * get_trash();
+
+int * get_trash_x_positions();
+
+int * get_trash_y_positions();
+
+void drop_trash_input();
+
+void pickup_trash(int index);
 
 int get_charging_station_x_position();
 
