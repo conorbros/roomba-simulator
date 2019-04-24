@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "cab202_timers.h": "c",
-        "cab202_graphics.h": "c",
-        "room.h": "c",
-        "helpers.h": "c"
-    },
-    "explorer.sortOrder": "type"
-}
