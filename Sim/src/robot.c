@@ -253,34 +253,22 @@ void move_robot2(){
 }
 
 void push_robot_up(){
-    double new_y = robot_y_pos - 1;
-
-    if(top_or_bottom_wall_collision(new_y) || charging_station_collision(robot_x_pos, new_y)) return;
-
+    if(top_or_bottom_wall_collision(robot_y_pos - 1) || charging_station_collision(robot_x_pos, robot_y_pos - 1)) return;
     robot_y_pos--;
 }
 
 void push_robot_down(){
-    double new_y = robot_y_pos + 1;
-
-    if(top_or_bottom_wall_collision(new_y) || charging_station_collision(robot_x_pos, new_y)) return;
-
+    if(top_or_bottom_wall_collision(robot_y_pos + 1) || charging_station_collision(robot_x_pos, robot_y_pos + 1)) return;
     robot_y_pos++;
 }
 
 void push_robot_left(){
-    double new_x = robot_x_pos - 1;
-
-    if(side_wall_collision(new_x) || charging_station_collision(new_x, robot_y_pos)) return;
-
+    if(side_wall_collision(robot_x_pos - 1) || charging_station_collision(robot_x_pos - 1, robot_y_pos)) return;
     robot_x_pos--;
 }
 
 void push_robot_right(){
-    double new_x = robot_x_pos + 1;
-
-    if(side_wall_collision(new_x) || charging_station_collision(new_x, robot_y_pos)) return;
-
+    if(side_wall_collision(robot_x_pos + 1) || charging_station_collision(robot_x_pos + 1, robot_y_pos)) return;
     robot_x_pos++;
 }
 
