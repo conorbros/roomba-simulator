@@ -12,8 +12,9 @@
 #include <room.h>
 #include <helpers.h>
 
-static bool simulation_quit;
-static int delay;
+static int time_out = INT_MAX;
+static bool simulation_quit = false;;
+static int delay = 50;
 
 void set_delay(){
     int input = get_int("Set the new loop delay: ");
@@ -58,12 +59,19 @@ void reset(){
     draw_room();
 }
 
+void set_timeout(){
+    time_out = get_int("Set the timeout duration for the simulation: ");
+}
+
+bool timed_out(){
+    return get_current_time() - get_time_start() >= time_out;
+}
+
 void quit(){
     simulation_quit = true;
 }
 
 int main(){
-    delay = 50;
 
     setup_screen();
     show_screen();
@@ -74,9 +82,9 @@ int main(){
     draw_robot();
     draw_room();
 
-    simulation_quit = false;
-
     while (!simulation_quit) {
+
+        if(timed_out()) return 0;
 
         loop();
         timer_pause(delay);

@@ -66,7 +66,7 @@ void process_input(char input){
 
         //set the time-out period, that is, the total permitted run time, measured in seconds.
         case 'o':
-            
+            set_timeout();
             break;
 
         //cause the device to start moving (if it is stationary) or stop moving (if it is mobile).

@@ -14,3 +14,5 @@ void reset();
 void quit();
 
 int main();
+
+void set_timeout();

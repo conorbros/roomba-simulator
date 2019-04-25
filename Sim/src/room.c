@@ -230,7 +230,7 @@ void init_slime(){
         x_pos = random_range(1, width - 1 - slime_side);
         y_pos = random_range(8, height - 4 - slime_side);
 
-        while(rubbish_overlap(x_pos, y_pos, slime_side, slime_side, slime, dust_count, slime_count, trash_count)){
+        while(rubbish_overlap(x_pos, y_pos, slime_side, slime_side, slime, 0, i, trash_count)){
             x_pos = random_range(1, width - 1 - slime_side);
             y_pos = random_range(8, height - 4 - slime_side);
         }
@@ -364,7 +364,7 @@ void init_rubbish(){
 
 void init_room(int dust, int slime, int trash){
     get_screen_size(&width, &height);
-    charging_station_x_position = width/2 - 5;
+    charging_station_x_position = width / 2 - 5;
     charging_station_y_position = 7;
     dust_count = dust;
     slime_count = slime;
