@@ -22,14 +22,6 @@ static double time_running;
 static double time_at_last_loop;
 static double time_start;
 
-int get_screen_width(){
-    return width;
-}
-
-int get_screen_height(){
-    return height;
-}
-
 void update_timer(){
     time_running = get_current_time() - time_start;
 }
@@ -123,6 +115,26 @@ void draw_status_item(char string[], int row, int column){
     draw_formatted(x_pos, y_pos,"%s", string);
 }
 
+void draw_timer(){
+    char time_output[20];
+    double diff = get_time_running();
+    int minutes = (int) diff / 60;
+    int seconds = (int) diff % 60;
+
+    if (minutes < 10 && seconds < 10){
+        sprintf(time_output, "Time running: 0%d:0%d", minutes, seconds);
+    }else if (minutes > 10 && seconds > 10){
+        sprintf(time_output, "Time running: %d:%d", minutes, seconds);
+    } else if (minutes < 10){
+        sprintf(time_output, "Time running: 0%d:%d", minutes, seconds);
+    } else if (seconds < 10){
+        sprintf(time_output, "Time running: %d:0%d", minutes, seconds);
+    } else if (minutes == 0){
+        sprintf(time_output, "Time running: 00:%d", seconds);
+    }
+    draw_status_item(time_output, 2, 1);
+}
+
 /**
  * draws the status items with the current values of the items
  */
@@ -138,21 +150,7 @@ void draw_status_items(){
     sprintf(battery, "Battery: %d%%", get_robot_battery());
     draw_status_item(battery, 1, 3);
 
-    char time_output[20];
-    double diff = get_time_running();
-    int minutes = (int) diff / 60;
-    int seconds = (int) diff % 60;
-
-    if (minutes < 10 && seconds < 10){
-        sprintf(time_output, "Time running: 0%d:0%d", minutes, seconds);
-    } else if (minutes < 10){
-        sprintf(time_output, "Time running: 0%d:%d", minutes, seconds);
-    } else if (seconds < 10){
-        sprintf(time_output, "Time running: %d:0%d", minutes, seconds);
-    } else if (minutes == 0){
-        sprintf(time_output, "Time running: 00:%d", seconds);
-    }
-    draw_status_item(time_output, 2, 1);
+    draw_timer();
 
     char weight[11];
     sprintf(weight, "Weight: %dg", get_robot_weight());
@@ -170,7 +168,6 @@ void draw_gui(){
     draw_status_display();
     draw_status_items();
 }
-
 
 void fill_rect(int x1, int y1, int x2, int y2, char c){
     if (x2 - x1 < 0 || y2 - y1 < 0) return;

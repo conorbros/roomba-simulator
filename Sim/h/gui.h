@@ -5,10 +5,6 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-int get_screen_width();
-
-int get_screen_height();
-
 void update_timer();
 
 double get_time_running();

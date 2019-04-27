@@ -21,7 +21,7 @@ void set_delay(){
     delay = input;
 }
 
-void room_setup(){
+void rubbish_setup(){
     int dust = get_int("How much dust: ");
     if (dust < 0) dust = 0;
     if (dust > 1000) dust = 1000;
@@ -34,7 +34,7 @@ void room_setup(){
     if (trash < 0) trash = 0;
     //if (trash > 5) trash = 5;
 
-    init_room(dust, slime, trash);
+    init_rubbish(dust, slime, trash);
 }
 
 void loop(){
@@ -51,10 +51,10 @@ void loop(){
 }
 
 void reset(){
-    room_setup();
+    rubbish_setup();
     start_timer();
     init_robot();
-    init_rubbish();
+    init_room();
     draw_robot();
     draw_room();
 }
@@ -75,13 +75,12 @@ int main(){
 
     setup_screen();
     show_screen();
-    room_setup();
+    init_room();
+    rubbish_setup();
     start_timer();
     init_robot();
-    init_rubbish();
-    draw_robot();
     draw_room();
-
+    draw_robot();
     while (!simulation_quit) {
 
         if(timed_out()) return 0;
