@@ -14,7 +14,7 @@
 
 static int time_out = INT_MAX;
 static bool simulation_quit = false;;
-static int delay = 50;
+static int delay = 15;
 
 void set_delay(){
     int input = get_int("Set the new loop delay: ");
@@ -28,11 +28,11 @@ void rubbish_setup(){
 
     int slime = get_int("How much slime: ");
     if (slime < 0) slime = 0;
-    //if (slime > 10) slime = 10;
+    if (slime > 10) slime = 10;
 
     int trash = get_int("How much trash: ");
     if (trash < 0) trash = 0;
-    //if (trash > 5) trash = 5;
+    if (trash > 5) trash = 5;
 
     init_rubbish(dust, slime, trash);
 }
@@ -51,9 +51,9 @@ void loop(){
 }
 
 void reset(){
+    init_robot();
     rubbish_setup();
     start_timer();
-    init_robot();
     init_room();
     draw_robot();
     draw_room();
@@ -76,9 +76,9 @@ int main(){
     setup_screen();
     show_screen();
     init_room();
+    init_robot();
     rubbish_setup();
     start_timer();
-    init_robot();
     draw_room();
     draw_robot();
     while (!simulation_quit) {

@@ -8,7 +8,6 @@
 
 #include <gui.h>
 #include <room.h>
-#include <misc.h>
 #include <helpers.h>
 
 static int width;
@@ -55,7 +54,7 @@ int get_robot_x_pos(){
 }
 
 int get_robot_y_pos(){
-    return (int) robot_y_pos;
+    return (int)robot_y_pos;
 }
 
 int get_robot_battery(){
@@ -128,7 +127,7 @@ void set_robot_location_and_direction(){
     int x = set_robot_x_pos();
     int y = set_robot_y_pos();
 
-    if (pixel_collision(x, y, robot_side, robot_side, robot, 
+    if (pixel_collision(x, y, robot_side, robot_side, robot,
         get_charging_station_x_position(), get_charging_station_y_position(), 9, 3, get_charging_station())) return;
 
     robot_x_pos = x;
@@ -137,14 +136,18 @@ void set_robot_location_and_direction(){
     manual_control = true;
 }
 
-void set_robot_return_to_base(){
-    return_to_base = true;
+void set_base_trajectory(){
     double t1 = (double)get_charging_station_x_position() - robot_x_pos;
     double t2 = (double)get_charging_station_y_position() - robot_y_pos;
 
     double d = sqrt(t1 * t1 + t2 * t2);
     base_dx = t1 * 0.35 / d;
     base_dy = t2 * 0.35 /d;
+}
+
+void set_robot_return_to_base(){
+    return_to_base = true;
+    set_base_trajectory();
 }
 
 void increment_battery(){
@@ -205,6 +208,8 @@ bool top_or_bottom_wall_collision(double y){
 }
 
 void move_robot2(){
+    if(manual_control && return_to_base) set_base_trajectory();
+
     if(!robot_moving || docked || manual_control){
         manual_control = false;
         draw_robot();

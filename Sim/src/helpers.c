@@ -1,19 +1,3 @@
-/**
- *	helpers.c, by Lawrence Buckingham.
- *  Student Id: n1839870
- *
- *	(C) 2017-2019 Queensland University of Technology
- *
- *	A small collection of helper functions.
- *
- *	To compile this function into your program:
- *      ZDK_PATH=(the name of the directory that contains libzdk.a)
- *		gcc your_file_1.c your_file_2.c ... helpers.c -o your_program -std-gnu99 -Wall -Werror -I${ZDK_PATH} -L${ZDK_PATH} -lzdk -lncurses -lm
- *
- *	Programs that use the function should place helpers.h somewhere in the include
- *	path and #include it.
- */
-
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -37,8 +21,8 @@ void draw_rect(int left, int top, int right, int bottom, int ch) {
 }
 
 /**
- *  Draws formatted text, starting at the specified location, and spreading 
- *  across multiple lines if necessary. The rendered text is added to the 
+ *  Draws formatted text, starting at the specified location, and spreading
+ *  across multiple lines if necessary. The rendered text is added to the
  *  zdk_screen buffer, but remains unseen until the next
  *  invocation of show_screen().
  *
@@ -86,7 +70,7 @@ void draw_formatted_lines(int x0, int y0, const char * format, ...) {
             x++;
         }
     } // End for
-} // End draw_formatted_lines	
+} // End draw_formatted_lines
 
 /**
  *  Erases the designated row of the terminal window by drawing spaces on it.
@@ -108,7 +92,7 @@ void erase_row(int y) {
  *  Parameters:
  *      prompt: a character array containing the text to display.
  *
- *      buffer: the address of a character array where the character data 
+ *      buffer: the address of a character array where the character data
  *          will be stored.
  *
  *      max_len: the maximum number of characters that can be stored in the
@@ -132,9 +116,9 @@ int get_chars(char * prompt, char * buffer, const int max_len) {
 
     while (len < max_len - 1) {
         int ch = wait_char();
-        
+
 		if (ch < ' ') break;
-		
+
 		buffer[len] = ch;
         len++;
         buffer[len] = 0;
@@ -150,8 +134,8 @@ int get_chars(char * prompt, char * buffer, const int max_len) {
 } // End get_chars}
 
 /**
- *  Use the bottom two rows of the terminal window as an input dialog. 
- *  Display a prompt, then consume characters from standard input until 
+ *  Use the bottom two rows of the terminal window as an input dialog.
+ *  Display a prompt, then consume characters from standard input until
  *  a non-digit is encountered. An unsigned integer value accumulates
  *  digit-by-digit as each character is received.
  *
@@ -165,14 +149,14 @@ int get_chars(char * prompt, char * buffer, const int max_len) {
 int get_int(char * prompt) {
     int w, h, z = 0, digits = 0;
     const char cursor = '_';
-    
+
 	get_screen_size(&w, &h);
     erase_row(h - 2);
     erase_row(h - 1);
     draw_string((w - strlen(prompt)) / 2, h - 2, prompt);
     draw_char((w - 1) / 2, h - 1, cursor);
     show_screen();
-    
+
 	while (1) {
         int digit = wait_char();
 
@@ -188,4 +172,28 @@ int get_int(char * prompt) {
     } // End while
 
     return z;
-} // End get_int	
+} // End get_int
+
+bool is_opaque(int x, int y, int x0, int y0, int w0, int h0, char pixels[])
+{
+    return x >= x0 && x < x0 + w0
+        && y >= y0 && y < y0 + h0
+        && pixels[(x-x0) + (y-y0)*w0] != ' ';
+}
+
+bool pixel_collision(int x0, int y0, int w0, int h0, char pixels0[],
+    int x1, int y1, int w1, int h1, char pixels1[])
+{
+    for ( int j = 0; j < h0; j++ ){
+        for (int i = 0; i < w0; i++){
+            int x = x0 + i;
+            int y = y0 + j;
+
+            if ( is_opaque(x, y, x0, y0, w0, h0, pixels0) && is_opaque(x, y, x1, y1, w1, h1, pixels1)){
+                return true;
+            }
+        }
+    }
+
+    return false;
+}

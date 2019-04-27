@@ -49,87 +49,56 @@ void process_input(char input){
 
     switch (input)
     {
-        //tell the device to stop cleaning and return to base i.e. step repeatedly towards the charging dock.
         case 'b':
             set_robot_return_to_base();
-            break;
 
-        //drop a piece of dust (small rubbish) on the floor.
         case 'd':
             drop_dust_input();
-            break;
 
-        //set the millisecond delay between successive invocations of the loop function.
         case 'm':
             set_delay();
-            break;
 
-        //set the time-out period, that is, the total permitted run time, measured in seconds.
         case 'o':
             set_timeout();
-            break;
 
-        //cause the device to start moving (if it is stationary) or stop moving (if it is mobile).
         case 'p':
             toggle_robot_moving();
-            break;
 
-        //quit simulation.
         case 'q':
             quit();
-            break;
 
-        //reset simulation.
         case 'r':
             reset();
-            break;
 
-        //drop a piece of slime (medium rubbish) on the floor.
         case 's':
             drop_slime_input();
-            break;
 
-        //drop a piece of trash (large rubbish) on the floor.
         case 't':
             drop_dust_input();
-            break;
 
-        //move the device to a new location and specify a new direction.
         case 'v':
             set_robot_location_and_direction();
-            break;
 
-        //change the amount (weight) of the rubbish currently on board the device.
         case 'w':
             set_robot_weight();
-            break;
 
-        //change the battery level of the device.
         case 'y':
             set_robot_battery();
-            break;
-        //push up
+
         case 'i':
             push_robot_up();
-            break;
-        //push left
+
         case 'j':
             push_robot_left();
-            break;
-        //push right
+
         case 'k':
             push_robot_down();
-            break;
-        //push down
+
         case 'l':
             push_robot_right();
-            break;
+
         case '?':
             display_help_screen();
-            break;
-
-        default:
-            break;
     }
 }
 

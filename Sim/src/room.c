@@ -2,18 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <stdio.h>
+#include <time.h>
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
 
 #include <drawing.h>
 #include <helpers.h>
 #include <robot.h>
-#include <misc.h>
 
 static int width;
 static int height;
@@ -26,17 +22,14 @@ static int dust_y_positions[1000];
 static int dust_count = 0;
 static int dust_weight = 1;
 
-
-//change slime limit to 10
-static int slime_x_positions[100];
-static int slime_y_positions[100];
+static int slime_x_positions[10];
+static int slime_y_positions[10];
 static int slime_count = 0;
 static int slime_side = 5;
 static int slime_weight = 5;
 
-//change trash limit to 5
-static int trash_x_positions[20];
-static int trash_y_positions[20];
+static int trash_x_positions[5];
+static int trash_y_positions[5];
 static int trash_count = 0;
 static int trash_weight = 20;
 static int trash_width = 11;
@@ -52,6 +45,7 @@ static char * slime =
     "  ~  ";
 
 static char * trash =
+
     "     &     "
     "    &&&    "
     "   &&&&&   "
@@ -69,22 +63,20 @@ int random_int(int min, int max){
 }
 
 bool robot_overlap(int x, int y, int w, int h, char pixels[]){
-    if(pixel_collision(x - 6, y - 6, w + 6, h + 6, pixels, 
-        get_robot_x_pos() - 6, get_robot_y_pos() - 6, 9+6, 9+6, get_robot())){
-            return true;
-    }
+    if(pixel_collision(x, y, w, h, pixels,
+        get_robot_x_pos(), get_robot_y_pos(), 9, 9, get_robot())) return true;
     return false;
 }
 
 bool charging_station_overlap(int x, int y, int w, int h, char pixels[]){
-    if(pixel_collision(x + 9, y + 3, w + 9, h + 3, pixels,
-        charging_station_x_position, charging_station_y_position, 9, 3, charging_station )) return true; 
+    if(pixel_collision(x, y, w, h, pixels,
+        charging_station_x_position, charging_station_y_position, 9, 3, charging_station )) return true;
     return false;
 }
 
 bool dust_overlap(int x, int y, int w, int h, char pixels[], int dust_c){
     for(int i = 0; i < dust_c; i++){
-        if(pixel_collision(x, y, w, h, pixels, 
+        if(pixel_collision(x, y, w, h, pixels,
             dust_x_positions[i], dust_y_positions[i], 1, 1, dust)) return true;
     }
     return false;
@@ -92,8 +84,8 @@ bool dust_overlap(int x, int y, int w, int h, char pixels[], int dust_c){
 
 bool slime_overlap(int x, int y, int w, int h, char pixels[], int slime_c){
     for(int i = 0; i < slime_c; i++){
-         if(pixel_collision(x - 4, y -4, w+5, h+5, pixels, 
-            slime_x_positions[i] - 4, slime_y_positions[i] -4, slime_side+5, slime_side+5, slime)) {
+         if(pixel_collision(x, y, w, h, pixels,
+            slime_x_positions[i], slime_y_positions[i], slime_side, slime_side, slime)) {
                 return true;
          };
     }
@@ -102,8 +94,8 @@ bool slime_overlap(int x, int y, int w, int h, char pixels[], int slime_c){
 
 bool trash_overlap(int x, int y, int w, int h, char pixels[], int trash_c){
     for(int k = 0; k < trash_c; k++){
-        if(pixel_collision(x - 4, y - 4, w + 4, h + 4, pixels, 
-            trash_x_positions[k] - 4, trash_y_positions[k] - 4, trash_width+4, trash_height+4, trash)) {
+        if(pixel_collision(x, y, w, h, pixels,
+            trash_x_positions[k], trash_y_positions[k], trash_width, trash_height, trash)) {
                 return true;
         }
     }
@@ -120,7 +112,7 @@ bool rubbish_overlap(int x, int y, int w, int h, char pixels[], int dust_c, int 
     if(robot_overlap(x, y, w, h, pixels)) return true;
 
     if(charging_station_overlap(x, y, w, h, pixels)) return true;
-   
+
     return false;
 }
 
@@ -185,7 +177,7 @@ void init_dust(){
         do{
             x_pos = random_int(1, width - 2);
             y_pos = random_int(8, height - 5);
-        }while(rubbish_overlap(x_pos, y_pos, 1, 1, dust, dust_count, slime_count, trash_count));
+        }while(rubbish_overlap(x_pos, y_pos, 2, 2, dust, i, slime_count, trash_count));
 
         dust_x_positions[i] = x_pos;
         dust_y_positions[i] = y_pos;
@@ -238,7 +230,7 @@ void drop_slime_input(){
 }
 
 void pickup_slime(int index){
-    for(int i = index; i < slime_count; i++){
+    for(int i = index; i < slime_count - 1; i++){
         slime_x_positions[i] = slime_x_positions[i + 1];
         slime_y_positions[i] = slime_y_positions[i + 1];
     }
@@ -323,7 +315,7 @@ void drop_trash_input(){
 }
 
 void pickup_trash(int index){
-    for(int i = index; i < trash_count; i++){
+    for(int i = index; i < trash_count - 1; i++){
         trash_x_positions[i] = trash_x_positions[i + 1];
         trash_y_positions[i] = trash_y_positions[i + 1];
     }
