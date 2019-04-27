@@ -32,6 +32,7 @@ static double base_dy;
 
 static const double velocity = 0.2;
 
+
 #define M_PI 3.14159265358979323846
 
 static char * robot =
@@ -93,8 +94,7 @@ void toggle_robot_moving(){
     robot_moving = !robot_moving;
 }
 
-// TODO: CHECK WONT COLLIDE WITH CHARGING STATION
-void set_robot_x_pos(){
+int set_robot_x_pos(){
     int x_pos = get_int("Set robot X position: ");
 
     if(x_pos <= 0) {
@@ -103,11 +103,10 @@ void set_robot_x_pos(){
         x_pos = width - (robot_side + 1);
     }
 
-    robot_x_pos = x_pos;
+    return x_pos;
 }
 
-// TODO: CHECK WONT COLLIDE WITH CHARGING STATION
-void set_robot_y_pos(){
+int set_robot_y_pos(){
     int y_pos = get_int("Set robot Y position: ");
 
     if(y_pos <= 7) {
@@ -116,7 +115,7 @@ void set_robot_y_pos(){
         y_pos = height - (robot_side + 4);
     }
 
-    robot_y_pos = y_pos;
+    return y_pos;
 }
 
 void set_robot_direction(){
@@ -126,8 +125,14 @@ void set_robot_direction(){
 }
 
 void set_robot_location_and_direction(){
-    set_robot_x_pos();
-    set_robot_y_pos();
+    int x = set_robot_x_pos();
+    int y = set_robot_y_pos();
+
+    if (pixel_collision(x, y, robot_side, robot_side, robot, 
+        get_charging_station_x_position(), get_charging_station_y_position(), 9, 3, get_charging_station())) return;
+
+    robot_x_pos = x;
+    robot_y_pos = y;
     set_robot_direction();
     manual_control = true;
 }
@@ -275,7 +280,9 @@ void slime_collision(){
     for(int i = 0; i < get_slime_count(); i++){
         if(pixel_collision(
             robot_x_pos, robot_y_pos, robot_side, robot_side, robot,
-            slime_x[i], slime_y[i], get_slime_side(), get_slime_side(), get_slime())) pickup_slime(i);
+            slime_x[i], slime_y[i], get_slime_side(), get_slime_side(), get_slime())) {
+                pickup_slime(i);
+            };
     }
 }
 
@@ -286,7 +293,9 @@ void trash_collision(){
     for(int i = 0; i < get_trash_count(); i++){
         if(pixel_collision(
             robot_x_pos, robot_y_pos, robot_side, robot_side, robot,
-            trash_x[i], trash_y[i], get_trash_width(), get_trash_height(), get_trash())) pickup_trash(i);
+            trash_x[i], trash_y[i], get_trash_width(), get_trash_height(), get_trash())) {
+                pickup_trash(i);
+            };
     }
 }
 

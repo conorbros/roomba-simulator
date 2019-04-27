@@ -34,6 +34,7 @@ static int slime_count = 0;
 static int slime_side = 5;
 static int slime_weight = 5;
 
+//change trash limit to 5
 static int trash_x_positions[20];
 static int trash_y_positions[20];
 static int trash_count = 0;
@@ -44,11 +45,11 @@ static int trash_height = 6;
 static char * dust = ".";
 
 static char * slime =
+    "  ~  "
     " ~~~ "
     "~~~~~"
-    "~~~~~"
-    "~~~~~"
-    " ~~~ ";
+    " ~~~ "
+    "  ~  ";
 
 static char * trash =
     "     &     "
@@ -68,41 +69,58 @@ int random_int(int min, int max){
 }
 
 bool robot_overlap(int x, int y, int w, int h, char pixels[]){
-    if(pixel_collision(x, y, w, h, pixels, get_robot_x_pos(), get_robot_y_pos(), 9, 9, get_robot())){
+    if(pixel_collision(x - 6, y - 6, w + 6, h + 6, pixels, 
+        get_robot_x_pos() - 6, get_robot_y_pos() - 6, 9+6, 9+6, get_robot())){
             return true;
     }
     return false;
 }
 
+bool charging_station_overlap(int x, int y, int w, int h, char pixels[]){
+    if(pixel_collision(x + 9, y + 3, w + 9, h + 3, pixels,
+        charging_station_x_position, charging_station_y_position, 9, 3, charging_station )) return true; 
+    return false;
+}
+
 bool dust_overlap(int x, int y, int w, int h, char pixels[], int dust_c){
     for(int i = 0; i < dust_c; i++){
-        if(pixel_collision(x, y, w, h, pixels, dust_x_positions[i], dust_y_positions[i], 1, 1, dust)) return true;
+        if(pixel_collision(x, y, w, h, pixels, 
+            dust_x_positions[i], dust_y_positions[i], 1, 1, dust)) return true;
     }
     return false;
 }
 
 bool slime_overlap(int x, int y, int w, int h, char pixels[], int slime_c){
     for(int i = 0; i < slime_c; i++){
-         if(pixel_collision(x, y, w, h, pixels, slime_x_positions[i], slime_y_positions[i], slime_side, slime_side, slime)) return true;
+         if(pixel_collision(x - 4, y -4, w+5, h+5, pixels, 
+            slime_x_positions[i] - 4, slime_y_positions[i] -4, slime_side+5, slime_side+5, slime)) {
+                return true;
+         };
     }
     return false;
 }
 
 bool trash_overlap(int x, int y, int w, int h, char pixels[], int trash_c){
     for(int k = 0; k < trash_c; k++){
-        if(pixel_collision(x, y, w, h, pixels, trash_x_positions[k], trash_y_positions[k], trash_width, trash_height, trash)) {
-            return true;
+        if(pixel_collision(x - 4, y - 4, w + 4, h + 4, pixels, 
+            trash_x_positions[k] - 4, trash_y_positions[k] - 4, trash_width+4, trash_height+4, trash)) {
+                return true;
         }
     }
     return false;
 }
 
 bool rubbish_overlap(int x, int y, int w, int h, char pixels[], int dust_c, int slime_c, int trash_c){
+    if(dust_overlap(x, y, w, h, pixels, dust_c)) return true;
+
+    if(slime_overlap(x, y, w, h, pixels, slime_c)) return true;
+
+    if(trash_overlap(x, y, w, h, pixels, trash_c)) return true;
 
     if(robot_overlap(x, y, w, h, pixels)) return true;
 
-    if(pixel_collision(x, y, w, h, pixels, charging_station_x_position, charging_station_y_position, 9, 3, charging_station)) return true;
-
+    if(charging_station_overlap(x, y, w, h, pixels)) return true;
+   
     return false;
 }
 
@@ -164,13 +182,10 @@ void init_dust(){
     int y_pos;
 
     for(int i = 0; i < dust_count; i++){
-        x_pos = random_int(1, width - 2);
-        y_pos = random_int(8, height - 5);
-
-        while(rubbish_overlap(x_pos, y_pos, 1, 1, dust, i, slime_count, trash_count)){
+        do{
             x_pos = random_int(1, width - 2);
             y_pos = random_int(8, height - 5);
-        }
+        }while(rubbish_overlap(x_pos, y_pos, 1, 1, dust, dust_count, slime_count, trash_count));
 
         dust_x_positions[i] = x_pos;
         dust_y_positions[i] = y_pos;
@@ -242,14 +257,10 @@ void init_slime(){
     int y_pos;
 
     for(int i = 0; i < slime_count; i++){
-
         do{
             x_pos = random_int(1, width - 1 - slime_side);
             y_pos = random_int(8, height - 4 - slime_side);
-
-        }while(trash_overlap(x_pos, y_pos, slime_side, slime_side, slime, trash_count) ||
-            slime_overlap(x_pos, y_pos, slime_side, slime_side, slime, i) ||
-            robot_overlap(x_pos, y_pos, slime_side, slime_side, slime));
+        }while(rubbish_overlap(x_pos, y_pos, slime_side, slime_side, slime, 0, i, trash_count));
 
         slime_x_positions[i] = x_pos;
         slime_y_positions[i] = y_pos;
