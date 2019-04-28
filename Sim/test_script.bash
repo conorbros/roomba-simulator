@@ -60,12 +60,12 @@ function toggle_device_moving () {
 	printf "p "
 }
 
-function quit_simulation () {
+function quit () {
 	printf "q "
 	printf "q "
 }
 
-function reset_simulation () {
+function reset () {
 	printf "r "
 }
 
@@ -74,7 +74,7 @@ function display_help_screen () {
 }
 
 function loop () {
-	if (( $# >= 1 )) && (( $1 > 0 )) 
+	if (( $# >= 1 )) && (( $1 > 0 ))
 	then
 		for (( i = 0; i < $1; i++ ))
 		do
@@ -89,9 +89,15 @@ function enter () {
 	printf "${1} "
 }
 
+function setup_rubbish () {
+	enter "${1}"
+	enter "${2}"
+	enter "${3}"
+}
+
 #========================================================================
 #	Run a single test.
-#========================================================================	
+#========================================================================
 
 function run_test () {
 	(( test_num ++ ))
@@ -99,9 +105,9 @@ function run_test () {
 	echo "Category: ${category}"
 	echo "Details : ${details}"
 	echo "Expect  : ${expect}"
-	
+
 	read -p "Press r to run the test or s to skip..." run_or_skip
-	
+
 	if [ "${run_or_skip}" == "r" ]
 	then
 		echo ${cmd} | ./zdj2
@@ -111,17 +117,67 @@ function run_test () {
 }
 
 #==============================================================================
-category="Setup terminal"
+category="Setup simulation"
 details="Status display and input window"
 expect="Status display contains student number, robot direction, battery life, timer, robot weight and rubbish available"
 
 cmd=$(
 	enter 1
 	loop 20
-	reset 5
 )
 
 run_test
 
 #==============================================================================
+category="Setup simulation"
+details="Sets up the terminal, displays robot and 50 dust, 5 slime and 5 trash"
+expect="Status display, robot in the middle, 50 dust, 5 slime and 5 trash"
+
+cmd=$(
+	setup_rubbish 50 5 5
+	loop 20
+	reset
+)
+
+run_test
+
+#==============================================================================
+category="Set robot moving"
+details="Sets up the terminal and sets the robot to move"
+expect="The robot to move straight downwards and bounce off the wall"
+
+cmd=$(
+	setup_rubbish 0 0 0
+	toggle_device_moving
+	reset
+)
+
+run_test
+
+#==============================================================================
+category="Robot picks up dust, slime and trash"
+details="Drop 1 dust, 1 slime and 1 trash and test robot picks it up"
+expect="Robot picks up the rubbish and this is reflected in the status display and the robot's weight increases"
+
+middleYPos = $LINES/2
+middleXPos = $COLUMNS/2
+
+cmd=$(
+	setup_rubbish 0 0 0
+	drop_dust middleXPOS middleYPos-15
+	drop_slime middleXPOS middleYPos-17
+	drop_trash middleXPOS middleYPos-25
+	toggle_device_moving
+)
+
+run_test
+
+#==============================================================================
+category="Robot battery decreases"
+details="Robot battery decreases at a rate of 1% per second when the robot is moving"
+
+
+
+
+
 
