@@ -291,7 +291,7 @@ void init_dust(){
     for(int i = 0; i < dust_count; i++){
         do{
             x_pos = random_int(1, width - 2);
-            y_pos = random_int(8, height - 4);
+            y_pos = random_int(7, height - 4);
         }while(object_overlap(x_pos, y_pos, 2, 2, dust, i, slime_count, trash_count));
 
         dust_x_positions[i] = x_pos;
@@ -384,7 +384,7 @@ void init_slime(){
     for(int i = 0; i < slime_count; i++){
         do{
             x_pos = random_int(1, width - 1 - slime_side);
-            y_pos = random_int(8, height - 3 - slime_side);
+            y_pos = random_int(7, height - 3 - slime_side);
         }while(object_overlap(x_pos, y_pos, slime_side, slime_side, slime, 0, i, trash_count));
 
         slime_x_positions[i] = x_pos;
@@ -504,7 +504,7 @@ void init_trash(){
 
         do{
             x_pos = random_int(1, width - 1 - trash_width);
-            y_pos = random_int(8, height - 3 - trash_height);
+            y_pos = random_int(7, height - 3 - trash_height);
         }while(trash_will_overlap(x_pos, y_pos, i));
 
         trash_x_positions[i] = x_pos;

@@ -166,8 +166,8 @@ void set_base_trajectory(){
     double t2 = (double)get_charging_station_y_position() - robot_y_pos;
 
     double d = sqrt(t1 * t1 + t2 * t2);
-    base_dx = t1 * 0.35 / d;
-    base_dy = t2 * 0.35 /d;
+    base_dx = t1 * velocity / d;
+    base_dy = t2 * velocity /d;
 }
 
 void set_robot_return_to_base(){
@@ -282,6 +282,7 @@ void move_robot(){
 
     //Handle RTB mode
     if(return_to_base){
+        set_base_trajectory();
         new_x = robot_x_pos + base_dx;
         new_y = robot_y_pos + base_dy;
 

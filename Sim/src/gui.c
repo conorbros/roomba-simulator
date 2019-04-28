@@ -211,7 +211,7 @@ void simulation_over_message(){
 
     int input;
     while(1){
-        input = get_char();
+        input = wait_char();
         if (input == 'r'){
             reset();
             break;
