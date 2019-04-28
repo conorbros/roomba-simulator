@@ -86,7 +86,7 @@ void process_input(char input){
             drop_slime_input();
             break;
         case 't':
-            drop_dust_input();
+            drop_trash_input();
             break;
         case 'v':
             set_robot_location_and_direction();

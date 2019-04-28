@@ -456,7 +456,7 @@ void drop_trash(int x, int y){
     if(trash_count == 5) return;
 
     trash_x_positions[trash_count] = x;
-    trash_x_positions[trash_count] = y;
+    trash_y_positions[trash_count] = y;
 
     trash_count++;
 }
@@ -470,10 +470,10 @@ void drop_trash_input(){
     if (x_pos > (width - 1) - trash_width) x_pos = (width - 1) - trash_width;
 
     int y_pos = get_int("Drop trash at y position: ");
-    if (y_pos > 8) y_pos = 8;
+    if (y_pos < 8) y_pos = 8;
     if (y_pos > (height - 3) - trash_height) y_pos = (height - 4) - trash_height;
 
-    drop_slime(x_pos, y_pos);
+    drop_trash(x_pos, y_pos);
 }
 
 /**

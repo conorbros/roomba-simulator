@@ -166,6 +166,7 @@ void set_base_trajectory(){
     double t2 = (double)get_charging_station_y_position() - robot_y_pos;
 
     double d = sqrt(t1 * t1 + t2 * t2);
+    robot_direction = d;
     base_dx = t1 * velocity / d;
     base_dy = t2 * velocity /d;
 }
