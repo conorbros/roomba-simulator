@@ -51,54 +51,57 @@ void process_input(char input){
     {
         case 'b':
             set_robot_return_to_base();
-
+            break;
         case 'd':
             drop_dust_input();
-
+            break;
         case 'm':
             set_delay();
-
+            break;
         case 'o':
             set_timeout();
-
+            break;
         case 'p':
             toggle_robot_moving();
-
+            break;
         case 'q':
             quit();
-
+            break;
         case 'r':
             reset();
-
+            break;
         case 's':
             drop_slime_input();
-
+            break;
         case 't':
             drop_dust_input();
-
+            break;
         case 'v':
             set_robot_location_and_direction();
-
+            break;
         case 'w':
             set_robot_weight();
-
+            break;
         case 'y':
             set_robot_battery();
-
+            break;
         case 'i':
             push_robot_up();
-
+            break;
         case 'j':
             push_robot_left();
-
+            break;
         case 'k':
             push_robot_down();
-
+            break;
         case 'l':
             push_robot_right();
-
+            break;
         case '?':
             display_help_screen();
+            break;
+        default:
+            break;
     }
 }
 

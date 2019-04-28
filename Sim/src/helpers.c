@@ -174,6 +174,9 @@ int get_int(char * prompt) {
     return z;
 } // End get_int
 
+/**
+ *  Determines whether the coordinate in the supplied pixel array is opaque or not
+ */
 bool is_opaque(int x, int y, int x0, int y0, int w0, int h0, char pixels[])
 {
     return x >= x0 && x < x0 + w0
@@ -181,6 +184,25 @@ bool is_opaque(int x, int y, int x0, int y0, int w0, int h0, char pixels[])
         && pixels[(x-x0) + (y-y0)*w0] != ' ';
 }
 
+/**
+ *  Determines whether there is a collision between any pixels in the supplied pixel arrays.
+ *
+ *  Parameters:
+ *      x0: the left most x coordinate of the first pixel array
+ *      y0: the top most y coordinate of the first pixel array
+ *      w0: the width of the first pixel array
+ *      h0: the height of the first pixel array
+ *      pixels0: the first pixel array
+ *
+ *      x1: the left most x coordinate of the second pixel array
+ *      y1: the top most y coordinate of the second pixel array
+ *      w1: the width of the second pixel array
+ *      h1: the height of the second pixel array
+ *      pixels1: the second pixel array
+ *
+ *  Returns:
+ *      true if collision, false if not
+ */
 bool pixel_collision(int x0, int y0, int w0, int h0, char pixels0[],
     int x1, int y1, int w1, int h1, char pixels1[])
 {
@@ -196,4 +218,26 @@ bool pixel_collision(int x0, int y0, int w0, int h0, char pixels0[],
     }
 
     return false;
+}
+
+/**
+ *  Draws the pixel array supplied on the terminal window, starting at the left and top coordinates
+ *
+ *  Parameters:
+ *      left: the left most x coordinate of the pixel array
+ *      top: the top most y coorindate of the pixel array
+ *      width: the width of the pixel array
+ *      height: the height of the pixel array
+ *      pixels: the pixel array to be array
+ */
+void draw_pixels(int left, int top, int width, int height, char pixels[], bool space_is_transparent){
+    for(int j = 0; j < height; j++){
+        for(int i = 0; i < width; i++){
+            if(pixels[i + j * width] != ' '){
+                draw_char(left + i, top + j, pixels[i + j * width]);
+            }else if(!space_is_transparent){
+                draw_char(left + i, top + j, ' ');
+            }
+        }
+    }
 }

@@ -6,7 +6,6 @@
 #include <cab202_timers.h>
 
 #include <robot.h>
-#include <drawing.h>
 #include <main.h>
 #include <helpers.h>
 #include <room.h>
@@ -51,16 +50,16 @@ double get_time_at_last_loop(){
  */
 void draw_border() {
 
-    draw_line(0, 0, 0, height - 1, vertical);
+    draw_line(0, 0, 0, height - 4, vertical);
     draw_line(0, 0, width - 2, 0, horizontal);
 
-    draw_line(1, height - 1, width - 1, height - 1, horizontal);
-    draw_line(width - 1, 1, width - 1, height - 1, vertical);
+    draw_line(1, height - 3, width - 2, height - 3, horizontal);
+    draw_line(width - 1, 1, width - 1, height - 4, vertical);
 
     draw_char(0, 0, corner);
-    draw_char(0, height - 1 , corner);
+    draw_char(0, height - 3, corner);
     draw_char(width - 1, 0, corner);
-    draw_char(width - 1, height - 1, corner);
+    draw_char(width - 1, height - 3, corner);
 }
 
 /**
@@ -164,7 +163,6 @@ void draw_status_items(){
 void draw_gui(){
     get_screen_size(&width, &height);
     draw_border();
-    draw_command_window();
     draw_status_display();
     draw_status_items();
 }

@@ -7,7 +7,6 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-#include <drawing.h>
 #include <helpers.h>
 #include <robot.h>
 
@@ -176,7 +175,7 @@ void init_dust(){
     for(int i = 0; i < dust_count; i++){
         do{
             x_pos = random_int(1, width - 2);
-            y_pos = random_int(8, height - 5);
+            y_pos = random_int(8, height - 4);
         }while(rubbish_overlap(x_pos, y_pos, 2, 2, dust, i, slime_count, trash_count));
 
         dust_x_positions[i] = x_pos;
@@ -251,7 +250,7 @@ void init_slime(){
     for(int i = 0; i < slime_count; i++){
         do{
             x_pos = random_int(1, width - 1 - slime_side);
-            y_pos = random_int(8, height - 4 - slime_side);
+            y_pos = random_int(8, height - 3 - slime_side);
         }while(rubbish_overlap(x_pos, y_pos, slime_side, slime_side, slime, 0, i, trash_count));
 
         slime_x_positions[i] = x_pos;
@@ -331,13 +330,11 @@ void init_trash(){
     int y_pos;
 
     for(int i = 0; i < trash_count; i++){
-        x_pos = random_int(1, width - 1 - trash_width);
-        y_pos = random_int(8, height - 4 - trash_height);
 
-        while(trash_will_overlap(x_pos, y_pos, i)){
+        do{
             x_pos = random_int(1, width - 1 - trash_width);
-            y_pos = random_int(8, height - 4 - trash_height);
-        }
+            y_pos = random_int(8, height - 2 - trash_height);
+        }while(trash_will_overlap(x_pos, y_pos, i));
 
         trash_x_positions[i] = x_pos;
         trash_y_positions[i] = y_pos;

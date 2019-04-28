@@ -6,13 +6,8 @@
 #include <cab202_timers.h>
 
 void set_delay();
-
 void loop();
-
 void reset();
-
 void quit();
-
 int main();
-
 void set_timeout();

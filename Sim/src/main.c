@@ -51,6 +51,7 @@ void loop(){
 }
 
 void reset(){
+    clear_screen();
     init_robot();
     rubbish_setup();
     start_timer();
