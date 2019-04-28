@@ -14,6 +14,9 @@
 static int width;
 static int height;
 
+ /**
+ *  Writes the help instructions on the screen
+ */
 void write_help_instructions(){
     int x_pos = width / 2 - 38;
     draw_string(x_pos, 10, "b: tell the device to return to base");
@@ -34,6 +37,9 @@ void write_help_instructions(){
     draw_string(x_pos, 26, "Press any key to exit");
 }
 
+ /**
+ *  Displays the help instructions on the screen
+ */
 void display_help_screen(){
     clear_screen();
     write_help_instructions();
@@ -44,6 +50,12 @@ void display_help_screen(){
     }
 }
 
+ /**
+ *  Processes the user input 
+ *
+ *  Parameters:
+ *      input: the user inputted character
+ */
 void process_input(char input){
     get_screen_size(&width, &height);
 

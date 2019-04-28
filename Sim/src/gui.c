@@ -160,12 +160,26 @@ void draw_status_items(){
     draw_status_item(rubbish, 2, 3);
 }
 
+/**
+ * Draws all the gui elements on screen
+ */
 void draw_gui(){
     get_screen_size(&width, &height);
     draw_border();
     draw_status_display();
     draw_status_items();
 }
+
+ /**
+ *  Fills a rectangle with spaces starting at the position supplied
+ *
+ *  Parameters:
+ *      x1: the starting x position of the rectangle
+ *      y1: the starting y position of the rectangle
+ *      x2: the right most x position of the rectangle
+ *      y2: the top most y position of the rectangle
+ *      c: the character to fill the rectangle with
+ */
 
 void fill_rect(int x1, int y1, int x2, int y2, char c){
     if (x2 - x1 < 0 || y2 - y1 < 0) return;
@@ -176,6 +190,9 @@ void fill_rect(int x1, int y1, int x2, int y2, char c){
     }
 }
 
+/**
+ *  Draws a filled rectange to display messages on
+ */
 void draw_status_rect(){
     draw_gui();
     draw_room();
@@ -184,6 +201,9 @@ void draw_status_rect(){
     fill_rect((width / 2) - 39, (height / 2) - 9, (width / 2) + 39, (height / 2) + 9, ' ');
 }
 
+/**
+ *  Displays a message when the simulation ends and allows the user to either quit or reset
+ */
 void simulation_over_message(){
     draw_status_rect();
     draw_string((width / 2) - 23, height / 2, "SIMULATION OVER! Press r to reset or q to quit.");
@@ -203,6 +223,9 @@ void simulation_over_message(){
     }
 }
 
+/**
+ *  Displays a message before the simulation quits
+ */
 void simulation_quit_message(){
     draw_status_rect();
     draw_string((width / 2) - 21, height / 2, "SIMULATION ENDING... Press any key to exit");

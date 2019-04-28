@@ -16,11 +16,17 @@ static int time_out = INT_MAX;
 static bool simulation_quit = false;;
 static int delay = 15;
 
+ /**
+ *  Sets a new loop delay
+ */
 void set_delay(){
     int input = get_int("Set the new loop delay: ");
     delay = input;
 }
 
+ /**
+ *  Sets up the initial rubbish on the screen
+ */
 void rubbish_setup(){
     int dust = get_int("How much dust: ");
     if (dust < 0) dust = 0;
@@ -50,6 +56,9 @@ void loop(){
     set_time_at_last_loop();
 }
 
+ /**
+ *  Resets the simulation to its starting values
+ */
 void reset(){
     clear_screen();
     init_robot();
@@ -60,14 +69,26 @@ void reset(){
     draw_room();
 }
 
+ /**
+ *  Sets the number of seconds the simulation is to run for
+ */
 void set_timeout(){
     time_out = get_int("Set the timeout duration for the simulation: ");
 }
 
+ /**
+ *  Determines if the simulation has timed out
+ *
+ *  Returns:
+ *      true if has timed out, false if not
+ */
 bool timed_out(){
     return get_current_time() - get_time_start() >= time_out;
 }
 
+ /**
+ *  Sets the simulation to quit on the next loop
+ */
 void quit(){
     simulation_quit = true;
 }
