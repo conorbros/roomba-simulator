@@ -6,11 +6,11 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-#include <robot.h>
-#include <gui.h>
-#include <input_control.h>
-#include <room.h>
-#include <helpers.h>
+#include "robot.h"
+#include "gui.h"
+#include "input_control.h"
+#include "room.h"
+#include "helpers.h"
 
 static int time_out = INT_MAX;
 static bool simulation_quit = false;;

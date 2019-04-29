@@ -5,10 +5,10 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-#include <robot.h>
-#include <main.h>
-#include <helpers.h>
-#include <room.h>
+#include "robot.h"
+#include "main.h"
+#include "helpers.h"
+#include "room.h"
 
 static int width;
 static int height;
@@ -228,10 +228,12 @@ void simulation_over_message(){
  */
 void simulation_quit_message(){
     draw_status_rect();
-    draw_string((width / 2) - 21, height / 2, "SIMULATION ENDING... Press any key to exit");
+    draw_string((width / 2) - 21, height / 2, "SIMULATION ENDING... Press the any key to exit");
     show_screen();
 
-    while(!wait_char()){
-        continue;
+    while(1){
+        char input = wait_char();
+
+        if (input > '0') break;
     }
 }

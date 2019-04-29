@@ -29,19 +29,31 @@ function drop_trash () {
 }
 
 function push_device_north () {
-	printf "i "
+	for (( i = 0; i < $1; i++))
+	do
+		printf "i"
+	done
 }
 
 function push_device_west () {
-	printf "j "
+	for (( i = 0; i < $1; i++ ))
+	do 
+		printf "l"
+	done
 }
 
 function push_device_south () {
-	printf "k "
+	for (( i = 0; i < $1; i++ ))
+	do
+		printf "k"
+	done
 }
 
 function push_device_east () {
-	printf "l "
+	for (( i = 0; i < $1; i++ ))
+	do
+		printf "j"
+	done
 }
 
 function set_delay () {
@@ -569,12 +581,80 @@ cmd=$(
 #==============================================================================
 test_item="15.ii"
 category="Pushing the device up"
-expect="The device moves up one pixel"
+expect="The device moves 3 pixels in each direction"
 
 cmd=$(
 	setup_rubbish 0 0 0
-	push_device_north
+	loop 30
+	push_device_north 1
+	loop 30
+	push_device_north 1
+	loop 30
+	push_device_north 1
+	loop 30
+	
+	loop 30
+	push_device_south 1
+	loop 30
+	push_device_south 1
+	loop 30
+	push_device_south 1
+	loop 30
+	
+	loop 30
+	push_device_west 1
+	loop 30
+	push_device_west 1
+	loop 30     
+	push_device_west 1
+	loop 30
+	
+	loop 30
+	push_device_east 1
+	loop 30
+	push_device_east 1
+	loop 30
+	push_device_east 1
+	loop 30
+	
+	set_time_out 5
 )
+
+#run_test
+
+#==============================================================================
+test_item="15.ii"
+category="Device being pushed into wall and charging station"
+expect="The device does not overlap the borders or the charging station"
+
+cmd=$(
+	setup_rubbish 0 0 0
+	push_device_east 100
+	loop 10
+	push_device_north 100
+	loop 10
+	push_device_west 100
+	set_time_out 10
+)
+
+#run_test
+
+#==============================================================================
+test_item="15.ii"
+category="Device in return to base reorients after being pushed"
+expect="The device in return to base mode reorients after being pushed"
+
+cmd=$(
+	setup_rubbish 0 0 0
+	echo "v100, 100, 0"
+	return_to_base
+	toggle_device_moving
+	loop 50
+	push_device_east 50
+	set_time_out 5
+)
+
+run_test
 
 #==============================================================================
 test_item="15.iii"
@@ -615,9 +695,10 @@ expect="The simulation displays a farewell message and exits the simulation"
 
 cmd=$(
 	setup_rubbish 0 0 0
-	echo "q"
-	loop 500
-	echo "q"
+	loop 100
+	printf "q"
+	loop 1000
+	printf "q"
 )
 
 #run_test
@@ -674,7 +755,7 @@ cmd=$(
 	set_time_out 15
 )
 
-run_test
+#run_test
 
 #==============================================================================
 test_item="15.viii"
@@ -694,13 +775,33 @@ cmd=$(
 
 #run_test
 
+#==============================================================================
+test_item="15.ix"
+category="Set the robot's battery level"
+expect="The robot's battery level can be manually set to be between 0 and 100"
 
+cmd=$(
+	setup_rubbish 0 0 0
+	loop 50
+	echo "y50"
+	loop 50
+	echo "y200"
+	set_time_out 3
+)
 
+#run_test
 
+#==============================================================================
+test_item="15.x"
+category="Help screen"
+expect="A help screen is displayed when the '?' key is pressed"
 
+cmd=$(
+	setup_rubbish 0 0 0
+	printf ${?}
+)
 
-
-
+#run_test
 
 
 

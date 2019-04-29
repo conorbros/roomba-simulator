@@ -7,8 +7,8 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-#include <helpers.h>
-#include <robot.h>
+#include "helpers.h"
+#include "robot.h"
 
 static int width;
 static int height;

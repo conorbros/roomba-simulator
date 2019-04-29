@@ -6,9 +6,9 @@
 #include <cab202_graphics.h>
 #include <cab202_timers.h>
 
-#include <gui.h>
-#include <room.h>
-#include <helpers.h>
+#include "gui.h"
+#include "room.h"
+#include "helpers.h"
 
 static int width;
 static int height;
