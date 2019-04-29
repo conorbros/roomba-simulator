@@ -74,10 +74,7 @@ function quit () {
 }
 
 function set_robot_location_direction () {
-	printf "v "
-	printf "${1} "
-	printf "${2} "
-	printf "${3} "
+	printf "v${1},${2},${3} "
 }
 
 function reset () {
@@ -130,78 +127,18 @@ function run_test () {
 }
 
 #==============================================================================
-test_item="2"
+test_item="2, 3, 4, 5, 6.i, 6.iii, 8.i , 8.ii, 8.iii"
 category="Setup simulation"
-expect="Status display contains student number, robot direction, battery life, timer, robot weight and rubbish available"
+expect="Status display contains student number, robot direction, battery life, timer, robot weight and rubbish available. The terminal window should be outlined by a border, vertical by '|' characters, horizontal by '-' characters and corners by '+' characters. Command input area should be two rows at the bottom of the screen. The robot vacuum should be in the centre of the screen, represented by 9x9 polygon of '@' characters. The device should move directly downwards upon the P command being pressed. The device should be represented by a 9x3 rectangle of '#' characters, positioned in the middle along the top border"
 
 cmd=$(
 	setup_rubbish 0 0 0
-	set_time_out 3
-)
-
-#run_test
-
-#==============================================================================
-test_item="3"
-category="Command Input area"
-expect="Command input area should be two rows at the bottom of the screen"
-
-cmd=$(
-	setup_rubbish 0 0 0
-	set_time_out 3
-) 
-
-#run_test
-
-#==============================================================================
-test_item="4"
-category="Border lines"
-expect="The terminal window should be outlined by a border, vertical by '|' characters, horizontal by '-' characters and corners by '+' characters"
-
-cmd=$(
-	setup_rubbish 0 0 0
-	set_time_out 3
-)
-
-#run_test
-
-#==============================================================================
-test_item="5"
-category="Robot Vacuum"
-expect="The robot vacuum should be in the centre of the screen, represented by 9x9 polygon of '@' characters"
-
-cmd=$(
-	setup_rubbish  0 0 0 
-	set_time_out 3
-)
-
-#run_test
-
-#==============================================================================
-test_item="6.i"
-category="Device in motion"
-expect="The device should move directly downwards upon the P command being pressed"
-
-cmd=$(
-	setup_rubbish 0 0 0
+	loop 70
 	toggle_device_moving
-	set_time_out 5
+	set_time_out 10
 )
 
-#run_test
-
-#==============================================================================
-test_item="6.ii, 6.iii"
-category="Device collision"
-expect="The device should pause for a time slice and turn a random angle between 30 and 60 degrees when it collides with wall or the charging station"
-
-cmd=$(
-	setup_rubbish 0 0 0
-	toggle_device_moving
-	set_time_out 20
-)
-
-#run_test
+run_test
 
 #==============================================================================
 test_item="6.iv"
@@ -217,10 +154,10 @@ cmd=$(
 	toggle_device_moving
 	loop 50
 	toggle_device_moving
-	set_time_out 5
+	set_time_out 2
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="6.v"
@@ -233,10 +170,10 @@ cmd=$(
 	loop 50
 	reset
 	setup_rubbish 0 0 0 
-	set_time_out 5
+	set_time_out 2
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="7.i"
@@ -246,15 +183,15 @@ expect="The device has an initial battery of 100, and it decreases at a rate of 
 cmd=$(
 	setup_rubbish 0 0 0
 	toggle_device_moving
-	set_time_out 10
+	set_time_out 4
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="7.iii"
 category="Device battery should not be under 0 or over 100"
-expect="The device battery should be set to 50, 100 and 0 in that order"
+expect="The device battery should be set to 50, 100 and 1 in that order"
 
 cmd=$(
 	setup_rubbish 0 0 0
@@ -262,23 +199,11 @@ cmd=$(
 	loop 70
 	set_robot_battery 150
 	loop 70
-	set_robot_battery -10
-	set_time_out 7
+	set_robot_battery 1
+	set_time_out 2
 )
 
-#run_test
-
-#==============================================================================
-test_item="8.i , 8.ii, 8.iii"
-category="Charging station"
-expect="The device should be represented by a 9x3 rectangle of '#' characters, positioned in the middle along the top border"
-
-cmd=$(
-	setup_rubbish 0 0 0 
-	set_time_out 3
-)
-
-#run_test
+run_test
 
 #==============================================================================
 test_item="8.iv, 8.v"
@@ -287,12 +212,12 @@ expect="The device should not overlap with the charging station and bounce off i
 
 cmd=$(
 	setup_rubbish 0 0 0
-	set_robot_location_direction 0 0 0
+	set_robot_location_direction 70 0 0
 	toggle_device_moving
-	set_time_out 10
+	set_time_out 4
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="9.i"
@@ -301,15 +226,14 @@ expect="When the device's battery goes below 25% it should head towards the char
 
 cmd=$(
 	setup_rubbish 0 0 0
-	set_robot_location_direction 50 50 0
 	loop 5
 	toggle_device_moving
 	loop 60
-	set_robot_battery 27
-	set_time_out 20
+	set_robot_battery 25
+	set_time_out 4
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="9.i"
@@ -318,18 +242,17 @@ expect="When the device's weight goes above 45g it should head towards the charg
 
 cmd=$(
 	setup_rubbish 0 0 0
-	set_robot_location_direction 50 50 0
 	loop 5
 	toggle_device_moving
 	loop 60
 	set_robot_weight 50
-	set_time_out 20
+	set_time_out 4
 )
 
-#run_test
+run_test
 
 #==============================================================================
-test_item="9.ii"
+test_item="9.ii, 9.iii, 9.iv"
 category="When in return to base, device passes over rubbish even if it has space to collect"
 expect="The device does not collect rubbish when in return to base mode, even if there is space. When the devices collides with the station it should enter docked mode."
 
@@ -338,57 +261,11 @@ cmd=$(
 	toggle_device_moving 
 	loop 60
 	set_robot_weight 46
-	set_time_out 15
-)
-
-#run_test
-
-#==============================================================================
-test_item="9.ii, 9.iii"
-category="When in return to base, device passes over rubbish even if it has space to collect"
-expect="The device does not collect rubbish when in return to base mode, even if there is space. When the devices collides with the station it should enter docked mode."
-
-cmd=$(
-	setup_rubbish 1000 10 5
-	toggle_device_moving 
-	loop 60
-	set_robot_weight 46
-	set_time_out 15
-)
-
-#run_test
-
-#==============================================================================
-test_item="9.iv"
-category="When the device is docked, DOCKED must be displayed in the command area, the battery indicator must show it is recharging, the robot remains docked until it is fully recharged, and it should move away from the station as per normal collision detection."
-expect="DOCKED to be displayed, battery indicator shows charging, device remains docked until fully charged, leaves dock by turning away from it."
-
-cmd=$(
-	setup_rubbish 0 0 0
-	toggle_device_moving
-	loop 40
 	set_robot_battery 30
-	return_to_base
-	set_time_out 15
+	set_time_out 7
 )
 
-#run_test
-
-#==============================================================================
-test_item="10"
-category="Battery fully discharged"
-expect="a rectangle to be placed in the centre of the screen with a simulation over message, leaves existing images in place, gives option of either reset or quit, everything should remain frozen."
-
-cmd=$(
-	setup_rubbish 500 5 2
-	set_robot_location_direction 0 30 0
-	toggle_device_moving
-	set_robot_battery 2
-	loop 9000
-	quit 
-)
-
-#run_test
+run_test
 
 #==============================================================================
 test_item="11.i"
@@ -402,10 +279,10 @@ cmd=$(
 	loop 100
 	reset
 	setup_rubbish 1000 10 5
-	set_time_out 5
+	set_time_out 2
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="11.ii, 11.iii"
@@ -416,10 +293,10 @@ expect="Robot turns off pump and returns to base when it reaches above 45, will 
 cmd=$(
 	setup_rubbish 1000 10 5
 	toggle_device_moving
-	set_time_out 20
+	set_time_out 7
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="12.i"
@@ -438,15 +315,15 @@ cmd=$(
 	echo "s${slime_x},${slime_y}"
 	echo "t${trash_x},${trash_y}"
 	toggle_device_moving
-	set_time_out 10
+	set_time_out 4
 )
 
-#run_test
+run_test
 
 #==============================================================================
-test_item="13.ii, 13.iii, 13.iv, 13.v"
+test_item="13.i, 13.ii, 13.iii, 13.iv, 13.v"
 category="Rubbish spawning"
-expect="Dust max: 1000, slime max: 10, trash max: 5, trash spawns in random locations on reset. Trash does not overlap other trash, the borders, charging station or robot."
+expect="Dust max: 1000, slime max: 10, trash max: 5, trash spawns in random locations on reset. Trash does not overlap other trash, the borders, charging station or robot. The rubbish is immediately collected and added to the robot's weight and removed from the available rubbish count on the status display"
 
 cmd=$(
 	setup_rubbish 9999 9999 9999
@@ -462,23 +339,10 @@ cmd=$(
 	loop 100 
 	reset
 	setup_rubbish 555 5 3
-	set_time_out 4
+	set_time_out 2
 )
 
-#run_test
-
-#==============================================================================
-test_item="13.i"
-category="Rubbish is collected by the vacuum immediately and the status display displays the correct weight and available rubbish on the floor"
-expect="The rubbish is immediately collected and added to the robot's weight and removed from the available rubbish count on the status display"
-
-cmd=$(
-	setup_rubbish 1000 10 5 
-	toggle_device_moving
-	set_time_out 15
-)
-
-#run_test
+run_test
 
 #==============================================================================
 test_item="14"
@@ -489,15 +353,15 @@ cmd=$(
 	setup_rubbish 0 0 0
 	set_robot_location_direction 0 0 0 
 	echo "d0,0"
-	set_time_out 3
+	set_time_out 2
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="15.i"
-category="Dropping dust"
-expect="Dust will be dropped at the supplied x, y coordinates"
+category="Dropping rubbish"
+expect="Rubbish will be dropped at the supplied x, y coordinates. Rubbish will not be dropped when the rubbish limit is reached"
 
 cmd=$(
 	setup_rubbish 0 0 0
@@ -506,82 +370,45 @@ cmd=$(
 	echo "d10,14"
 	loop 30
 	echo "d10, 16"
-	set_time_out 3
-)
-
-#run_test
-
-#==============================================================================
-test_item="15.i"
-category="Dropping dust when dust limit reached"
-expect="Dust will not be dropped when the dust limit is reached"
-
-cmd=$(
+	loop 60
+	reset
 	setup_rubbish 1000 0 0
+	loop 30
 	echo "d10,10"
-	set_time_out 5
-)
-
-#run_test
-
-#==============================================================================
-test_item="15.i"
-category="Dropping slime"
-expect="Slime will be dropped the supplied x, y coordinates"
-
-cmd=$(
+	loop 30
+	
+	reset
 	setup_rubbish 0 0 0
-	echo "s10,10"
-	echo "s15,15"
-	set_time_out 3
-)
-
-#run_test
-
-#==============================================================================
-test_item="15.i"
-category="Dropping slime when slime limit reached"
-expect="Slime will not be dropped when the slime limit is reached"
-
-cmd=$(
+	echo "s20,10"
+	echo "s20,15"
+	loop 30
+	reset
 	setup_rubbish 0 10 0
+	loop 30
 	echo "s10,10"
-	set_time_out 3
-)
-
-#run_test
-
-#==============================================================================
-test_item="15.i"
-category="Dropping trash"
-expect="Trash will be the supplied x, y coordinates."
-
-cmd=$(
+	loop 30
+	
+	reset
 	setup_rubbish 0 0 0
-	echo "t10,10"
-	echo "t20,20"
-	set_time_out 3
-)
-
-#run_test
-
-#==============================================================================
-test_item="15.i"
-category="Dropping trash when trash limit reached"
-expect="Trash will not be dropped when the trash limit is reached"
-
-cmd=$(
+	loop 50
+	echo "t30,10"
+	loop 50
+	echo "t30,20"
+	loop 50
+	reset 
 	setup_rubbish 0 0 5
+	loop 50
 	echo "t10,10"
+	
 	set_time_out 3
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="15.ii"
 category="Pushing the device up"
-expect="The device moves 3 pixels in each direction"
+expect="The device moves 3 pixels in each direction. The device does not overlap the borders or the charging station"
 
 cmd=$(
 	setup_rubbish 0 0 0
@@ -617,27 +444,19 @@ cmd=$(
 	push_device_east 1
 	loop 30
 	
-	set_time_out 5
-)
-
-#run_test
-
-#==============================================================================
-test_item="15.ii"
-category="Device being pushed into wall and charging station"
-expect="The device does not overlap the borders or the charging station"
-
-cmd=$(
+	reset
 	setup_rubbish 0 0 0
 	push_device_east 100
 	loop 10
 	push_device_north 100
 	loop 10
 	push_device_west 100
-	set_time_out 10
+	
+	set_time_out 3
 )
 
-#run_test
+run_test
+
 
 #==============================================================================
 test_item="15.ii"
@@ -646,12 +465,11 @@ expect="The device in return to base mode reorients after being pushed"
 
 cmd=$(
 	setup_rubbish 0 0 0
-	echo "v100, 100, 0"
 	return_to_base
 	toggle_device_moving
 	loop 50
 	push_device_east 50
-	set_time_out 5
+	set_time_out 3
 )
 
 run_test
@@ -671,37 +489,22 @@ cmd=$(
 	set_delay 25
 	loop 120
 	set_delay 5
-	set_time_out 5
+	set_time_out 2
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="15.iv"
 category="Setting the time out period"
-expect="The simulation will time out after 4 seconds"
+expect="The simulation will time out after 2 seconds"
 
 cmd=$(
 	setup_rubbish 0 0 0 
-	set_time_out 4
+	set_time_out 2
 )
 
-#run_test
-
-#==============================================================================
-test_item="15.v"
-category="Quit the simulation"
-expect="The simulation displays a farewell message and exits the simulation"
-
-cmd=$(
-	setup_rubbish 0 0 0
-	loop 100
-	printf "q"
-	loop 1000
-	printf "q"
-)
-
-#run_test
+run_test
 
 #==============================================================================
 test_item="15.vi"
@@ -718,10 +521,10 @@ cmd=$(
 	loop 100
 	reset
 	setup_rubbish 500 10 5
-	set_time_out 5
+	set_time_out 2
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="15.vii"
@@ -735,10 +538,10 @@ cmd=$(
 	echo "v10,10,0"
 	loop 70
 	echo "v20,20,90"
-	set_time_out 4
+	set_time_out 2
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="15.vii"
@@ -752,10 +555,10 @@ cmd=$(
 	return_to_base
 	loop 60
 	echo "v10,10,0"
-	set_time_out 15
+	set_time_out 3
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="15.viii"
@@ -773,7 +576,7 @@ cmd=$(
 	set_time_out 3
 )
 
-#run_test
+run_test
 
 #==============================================================================
 test_item="15.ix"
@@ -789,19 +592,9 @@ cmd=$(
 	set_time_out 3
 )
 
-#run_test
+run_test
 
-#==============================================================================
-test_item="15.x"
-category="Help screen"
-expect="A help screen is displayed when the '?' key is pressed"
 
-cmd=$(
-	setup_rubbish 0 0 0
-	printf ${?}
-)
-
-#run_test
 
 
 
